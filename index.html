@@ -75,7 +75,7 @@
       align-items:center;
       justify-content:space-between;
       margin-left:24px;
-      margin-right:calc(24px + var(--scrollbar-w, 0px));
+      margin-right:24px;
       padding:16px 24px;
       border-radius:8px;
       transition:background .5s cubic-bezier(.4,0,.2,1), box-shadow .5s cubic-bezier(.4,0,.2,1);
@@ -311,7 +311,7 @@
         margin-right:auto;
       }
       .navbar__inner{
-        max-width:1440px;
+        max-width:1392px;
         margin-left:auto;
         margin-right:auto;
       }
@@ -336,7 +336,7 @@
       }
       .navbar__inner{
         margin-left:12px;
-        margin-right:calc(12px + var(--scrollbar-w, 0px));
+        margin-right:12px;
         padding:12px 16px;
       }
       .navbar__logo{
@@ -546,16 +546,6 @@
   </div>
 
   <script>
-    /* Scrollbar width compensation for fixed navbar */
-    (function(){
-      function setScrollbarVar(){
-        const sw = window.innerWidth - document.documentElement.clientWidth;
-        document.documentElement.style.setProperty('--scrollbar-w', sw + 'px');
-      }
-      setScrollbarVar();
-      window.addEventListener('resize', setScrollbarVar);
-    })();
-
     /* Navbar: vastspace-style hide/show + transparent→solid */
     (function(){
       const nav = document.querySelector('.navbar');
