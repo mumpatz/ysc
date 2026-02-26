@@ -64,7 +64,11 @@
       top:0;left:0;right:0;
       z-index:100;
       padding:24px 0;
-      transition:padding .4s ease;
+      transition:transform .35s cubic-bezier(.4,0,.2,1), padding .4s ease;
+      will-change:transform;
+    }
+    .navbar.is-hidden{
+      transform:translateY(-100%);
     }
     .navbar__inner{
       display:flex;
@@ -74,7 +78,7 @@
       margin-right:calc(24px + var(--scrollbar-w, 0px));
       padding:16px 24px;
       border-radius:8px;
-      transition:background .4s ease, box-shadow .4s ease;
+      transition:background .5s cubic-bezier(.4,0,.2,1), box-shadow .5s cubic-bezier(.4,0,.2,1);
     }
     .navbar__logo{
       width:88px;
@@ -552,20 +556,53 @@
       window.addEventListener('resize', setScrollbarVar);
     })();
 
-    /* Navbar: transparent → solid on scroll (vastspace pattern) */
+    /* Navbar: vastspace-style hide/show + transparent→solid */
     (function(){
       const nav = document.querySelector('.navbar');
-      const trigger = 80; /* px from top */
-      let solid = false;
-      function check(){
-        const shouldBeSolid = window.scrollY > trigger;
+      const SOLID_TRIGGER = 80;   /* px: when to go opaque */
+      const HIDE_DELTA    = 8;    /* px: min scroll distance to trigger hide */
+      let lastY = window.scrollY;
+      let hidden = false;
+      let solid  = false;
+      let ticking = false;
+
+      function update(){
+        const y = window.scrollY;
+        const delta = y - lastY;
+
+        /* transparent ↔ solid */
+        const shouldBeSolid = y > SOLID_TRIGGER;
         if(shouldBeSolid !== solid){
           solid = shouldBeSolid;
           nav.classList.toggle('is-solid', solid);
         }
+
+        /* hide on scroll-down, show on scroll-up */
+        if(delta > HIDE_DELTA && y > SOLID_TRIGGER && !hidden){
+          hidden = true;
+          nav.classList.add('is-hidden');
+        } else if(delta < -HIDE_DELTA && hidden){
+          hidden = false;
+          nav.classList.remove('is-hidden');
+        }
+
+        /* At very top: always visible + transparent */
+        if(y <= 0){
+          hidden = false;
+          nav.classList.remove('is-hidden');
+        }
+
+        lastY = y;
+        ticking = false;
       }
-      window.addEventListener('scroll', check, {passive:true});
-      check();
+
+      window.addEventListener('scroll', function(){
+        if(!ticking){
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      }, {passive:true});
+      update();
     })();
   </script>
 </body>
