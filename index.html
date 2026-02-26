@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Story — Yoga Spirit Circle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ========= RESET ========= */
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+    /* ========= DESIGN TOKENS ========= */
+    :root{
+      --soft-alabaster:#FFFAEF;
+      --earth-clay:#884D28;
+      --deep-forest:#403E22;
+      --sun-kissed-terra:#F29F53;
+      --muted-yellow:#F9EF71;
+      --olive-grove:#E5DAA1;
+      --ocean-blue:#37629E;
+
+      --ff-sans:'Karla',sans-serif;
+      --ff-serif:'Lora',serif;
+
+      --grid-margin:48px;
+      --grid-gutter:8px;
+      --grid-cols:24;
+    }
+
+    body{
+      font-family:var(--ff-sans);
+      color:var(--deep-forest);
+      background:#111;
+      overflow-x:hidden;
+    }
+
+    /* ========= VIDEO BACKGROUND ========= */
+    .video-bg{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      overflow:hidden;
+    }
+    .video-bg video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    /* ========= NAVBAR ========= */
+    .navbar{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:100;
+      padding:24px;
+    }
+    .navbar__inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:16px 24px;
+      border-radius:8px;
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      background:rgba(255,250,239,0.15);
+    }
+    .navbar__logo{
+      width:88px;
+      height:50px;
+      flex-shrink:0;
+    }
+    .navbar__logo img{
+      width:100%;
+      height:100%;
+    }
+    .navbar__right{
+      display:flex;
+      align-items:center;
+      gap:40px;
+    }
+    .navbar__menu{
+      display:flex;
+      list-style:none;
+      gap:32px;
+    }
+    .navbar__menu a{
+      font-family:var(--ff-sans);
+      font-weight:600;
+      font-size:16px;
+      text-transform:uppercase;
+      color:var(--soft-alabaster);
+      text-decoration:none;
+      letter-spacing:0.3px;
+      transition:opacity .2s;
+    }
+    .navbar__menu a:hover{
+      opacity:.7;
+    }
+    .cta-btn{
+      display:inline-block;
+      border:none;
+      border-radius:100px;
+      padding:16px 24px;
+      font-family:var(--ff-sans);
+      font-weight:600;
+      font-size:16px;
+      text-transform:uppercase;
+      color:var(--soft-alabaster);
+      background:var(--earth-clay);
+      text-decoration:none;
+      cursor:pointer;
+      transition:background .25s,color .25s;
+      letter-spacing:0.3px;
+      white-space:nowrap;
+    }
+    .cta-btn:hover{
+      background:var(--deep-forest);
+    }
+
+    /* Burger (mobile only) */
+    .navbar__burger{
+      display:none;
+      flex-direction:column;
+      gap:8px;
+      cursor:pointer;
+      padding:4px;
+    }
+    .navbar__burger span{
+      display:block;
+      width:24px;
+      height:2px;
+      background:var(--soft-alabaster);
+      border-radius:1px;
+    }
+
+    /* ========= CONTENT LAYER ========= */
+    .content{
+      position:relative;
+      z-index:1;
+    }
+
+    /* Spacer to push card below navbar */
+    .hero-spacer{
+      height:128px;
+    }
+
+    /* ========= HERO CARD ========= */
+    .hero-card{
+      background:var(--soft-alabaster);
+      border-radius:8px;
+      margin:0 24px;
+      overflow:hidden;
+    }
+
+    /* ---- Top section: Logo + Text via CSS Grid ---- */
+    .hero-top{
+      display:grid;
+      grid-template-columns:665px 1fr;
+      grid-template-rows:auto auto auto;
+      column-gap:64px;
+      padding:64px;
+    }
+    /* Logo spans full left column */
+    .hero-top__logo{
+      grid-column:1;
+      grid-row:1 / 4;
+      align-self:start;
+    }
+    .hero-top__logo img{
+      width:100%;
+      height:auto;
+    }
+    /* Label, H1, Copy in right column */
+    .hero-top__label{
+      grid-column:2;
+      grid-row:1;
+      font-family:var(--ff-sans);
+      font-weight:600;
+      font-size:16px;
+      text-transform:uppercase;
+      color:var(--earth-clay);
+      padding-top:40px;
+      margin-bottom:24px;
+    }
+    .hero-top__h1{
+      grid-column:2;
+      grid-row:2;
+      font-family:var(--ff-sans);
+      font-weight:700;
+      font-size:62px;
+      text-transform:uppercase;
+      line-height:1.1;
+      color:var(--earth-clay);
+      margin-bottom:48px;
+    }
+    .hero-top__copy{
+      grid-column:2;
+      grid-row:3;
+      font-family:var(--ff-serif);
+      font-weight:500;
+      font-size:36px;
+      line-height:1.2;
+      color:var(--earth-clay);
+    }
+    .hero-top__copy p{
+      margin-bottom:24px;
+    }
+    .hero-top__copy p:last-child{
+      margin-bottom:0;
+    }
+
+    /* ---- Portrait Cards Row ---- */
+    .portraits{
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      padding:0 0 0 0;
+      margin-bottom:-24px;
+    }
+    .portrait-col{
+      width:443px;
+      flex-shrink:0;
+      display:flex;
+      flex-direction:column;
+      gap:36px;
+    }
+    .portrait-col:nth-child(1){
+      padding-left:56px;
+      padding-bottom:454px;
+    }
+    .portrait-col:nth-child(2){
+      padding-right:56px;
+      padding-top:360px;
+      padding-bottom:94px;
+    }
+    .portrait-col:nth-child(3){
+      padding-top:240px;
+    }
+
+    /* Image frame */
+    .img-frame{
+      background:var(--olive-grove);
+      padding:12px;
+      width:387px;
+      height:537px;
+    }
+    .img-frame img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius:12px;
+      display:block;
+    }
+
+    .portrait-desc{
+      font-family:var(--ff-sans);
+      font-weight:600;
+      font-size:18px;
+      line-height:1.15;
+      color:var(--earth-clay);
+      max-width:363px;
+      padding-right:23px;
+      text-align:center;
+      margin:0 auto;
+    }
+
+    /* ========= MOBILE ========= */
+    @media(max-width:768px){
+      :root{
+        --grid-margin:24px;
+        --grid-cols:12;
+      }
+
+      /* Navbar */
+      .navbar{
+        padding:12px;
+      }
+      .navbar__inner{
+        padding:12px 16px;
+      }
+      .navbar__logo{
+        width:66px;
+        height:38px;
+      }
+      .navbar__menu{
+        display:none;
+      }
+      .navbar__burger{
+        display:flex;
+      }
+      .navbar__right{
+        gap:12px;
+      }
+      .cta-btn{
+        padding:12px 16px;
+        font-size:14px;
+      }
+
+      /* Spacer */
+      .hero-spacer{
+        height:80px;
+      }
+
+      /* Hero card */
+      .hero-card{
+        margin:0 12px;
+      }
+
+      /* Top section stacks vertically on mobile */
+      .hero-top{
+        display:flex;
+        flex-direction:column;
+        padding:24px 12px;
+        gap:0;
+      }
+      .hero-top__label{
+        order:1;
+        font-size:16px;
+        padding-top:0;
+        margin-bottom:16px;
+      }
+      .hero-top__h1{
+        order:2;
+        font-size:44px;
+        margin-bottom:120px;
+      }
+      .hero-top__logo{
+        order:3;
+        width:138px;
+        margin-bottom:24px;
+      }
+      .hero-top__copy{
+        order:4;
+        font-size:28px;
+      }
+      .hero-top__copy p{
+        margin-bottom:16px;
+      }
+
+      /* Portrait cards stack */
+      .portraits{
+        flex-direction:column;
+        align-items:stretch;
+        gap:0;
+        margin-bottom:0;
+      }
+      .portrait-col{
+        width:100%;
+        padding:12px !important;
+        padding-top:12px !important;
+        padding-bottom:12px !important;
+      }
+      .portrait-col:nth-child(1){
+        padding-right:83px !important;
+        padding-left:12px !important;
+      }
+      .portrait-col:nth-child(2){
+        padding-left:83px !important;
+        padding-right:12px !important;
+      }
+      .portrait-col:nth-child(3){
+        padding-left:40px !important;
+        padding-right:40px !important;
+      }
+
+      /* Mobile portrait card style */
+      .portrait-card-mobile{
+        background:var(--soft-alabaster);
+        border-radius:8px;
+        padding:12px 12px 64px;
+        display:flex;
+        flex-direction:column;
+        gap:36px;
+      }
+
+      /* Mobile: terra cotta frames */
+      .img-frame{
+        background:var(--sun-kissed-terra);
+        padding:8px;
+        width:100%;
+        height:auto;
+        aspect-ratio:267/370;
+      }
+      .img-frame img{
+        border-radius:10px;
+      }
+
+      .portrait-desc{
+        font-size:18px;
+        max-width:256px;
+        padding-right:0;
+        text-align:left;
+        margin:0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== STICKY VIDEO BACKGROUND ===== -->
+  <div class="video-bg">
+    <video autoplay muted loop playsinline>
+      <source src="assets/video/ocean-loop.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="navbar__inner">
+      <a href="/" class="navbar__logo">
+        <img src="assets/logos/logo-stack.svg" alt="Yoga Spirit Circle">
+      </a>
+      <div class="navbar__right">
+        <ul class="navbar__menu">
+          <li><a href="#">Retreats</a></li>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Shop</a></li>
+          <li><a href="#">FAQs</a></li>
+        </ul>
+        <a href="#" class="cta-btn">See all retreats</a>
+        <div class="navbar__burger" aria-label="Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== CONTENT LAYER ===== -->
+  <div class="content">
+    <div class="hero-spacer"></div>
+
+    <!-- ===== HERO CARD ===== -->
+    <section class="hero-card">
+
+      <!-- Top: Logo + Text -->
+      <div class="hero-top">
+        <div class="hero-top__logo">
+          <img src="assets/logos/logo-big.svg" alt="YSC Logo">
+        </div>
+        <p class="hero-top__label">Our Vision</p>
+        <h1 class="hero-top__h1">A Sacred Pause:<br>Re-Wild Your Spirit</h1>
+        <div class="hero-top__copy">
+          <p>A Yoga Spirit Circle retreat is more than a getaway; it is a sacred pause—a 're-wilding' of the self. It is a gathering of souls dedicated to profound nourishment, creativity, and connection.</p>
+          <p>We believe in the alchemy of nature, art, and spiritual wisdom. Our mission is to uplift individuals by bringing them together to create conscious communities. Since our founding in 2013, our circle has expanded rapidly, weaving a tapestry of lasting friendships between guests, teachers, and our talented team of staff and volunteers.</p>
+          <p>The vibe created here is relaxed, peaceful, kind, and fun. It is a space where you can simply be.</p>
+        </div>
+      </div>
+
+      <!-- Portrait Cards -->
+      <div class="portraits">
+
+        <!-- Yvonne -->
+        <div class="portrait-col">
+          <div class="img-frame">
+            <img src="assets/images/Yvonne.png" alt="Yvonne">
+          </div>
+          <p class="portrait-desc">Based in Berlin, Yvonne is an entrepreneurial spirit dedicated to living life to the fullest. Whether exploring new destinations or enjoying techno music, she believes laughter and adventure are essential for growth. A self-confessed foodie, Yvonne curates our culinary experiences, hiring the best plant-based chefs to ensure our menus are as nourishing as they are delicious.</p>
+        </div>
+
+        <!-- Isabel -->
+        <div class="portrait-col">
+          <div class="img-frame">
+            <img src="assets/images/Isabel.png" alt="Isabel">
+          </div>
+          <p class="portrait-desc">Living on the Costa del Sol near our Andalusian venues, Isabel blends a rational engineering background with a deep love for spirituality. Passionate about interior design and pottery, she creates spaces that are both beautiful and functional. A natural host, Isabel finds joy in creating warm, welcoming environments. She stays grounded through yoga, swimming, and dancing.</p>
+        </div>
+
+        <!-- Humans -->
+        <div class="portrait-col">
+          <div class="img-frame">
+            <img src="assets/images/Humans.png" alt="Our Community">
+          </div>
+          <p class="portrait-desc">Our vision truly comes alive through the amazing humans we meet. It is the unique mix of inspiring teachers, talented chefs, and open-hearted guests who fill this circle with energy. Together, they create a vibe that is relaxed, kind, and deeply connected. We cherish the lasting friendships formed here and look forward to welcoming you into this vibrant community.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Padding below for scroll space -->
+    <div style="height:60vh"></div>
+  </div>
+
+</body>
+</html>
