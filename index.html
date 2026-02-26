@@ -64,7 +64,7 @@
       top:0;left:0;right:0;
       z-index:100;
       padding:24px 0;
-      transition:transform .35s cubic-bezier(.4,0,.2,1), padding .4s ease;
+      transition:transform .35s cubic-bezier(.4,0,.2,1), padding .4s cubic-bezier(.4,0,.2,1);
       will-change:transform;
     }
     .navbar.is-hidden{
@@ -78,7 +78,13 @@
       margin-right:24px;
       padding:16px 24px;
       border-radius:8px;
-      transition:background .5s cubic-bezier(.4,0,.2,1), box-shadow .5s cubic-bezier(.4,0,.2,1);
+      transition:background .5s cubic-bezier(.4,0,.2,1),
+                 box-shadow .5s cubic-bezier(.4,0,.2,1),
+                 margin .4s cubic-bezier(.4,0,.2,1),
+                 padding .4s cubic-bezier(.4,0,.2,1),
+                 border-radius .4s cubic-bezier(.4,0,.2,1),
+                 border-color .4s cubic-bezier(.4,0,.2,1);
+      border-bottom:1px solid transparent;
     }
     .navbar__logo{
       width:88px;
@@ -139,8 +145,16 @@
     .cta-btn .cta-mobile{display:none}
 
     /* --- Solid state (on scroll) --- */
+    .navbar.is-solid{
+      padding:0;
+    }
     .navbar.is-solid .navbar__inner{
       background:var(--soft-alabaster);
+      margin-left:0;
+      margin-right:0;
+      padding:16px 48px;
+      border-radius:0;
+      border-bottom-color:rgba(136,77,40,0.15);
     }
     .navbar.is-solid .navbar__menu a{
       color:var(--earth-clay);
@@ -314,6 +328,9 @@
         max-width:1392px;
         margin-left:auto;
         margin-right:auto;
+      }
+      .navbar.is-solid .navbar__inner{
+        max-width:none;
       }
       .hero-top__h1{
         font-size:62px;
