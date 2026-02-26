@@ -63,8 +63,8 @@
       position:fixed;
       top:0;left:0;right:0;
       z-index:100;
-      padding:24px 0;
-      transition:transform .35s cubic-bezier(.4,0,.2,1), padding .4s cubic-bezier(.4,0,.2,1);
+      padding:0 0 24px 0;
+      transition:transform .35s cubic-bezier(.4,0,.2,1);
       will-change:transform;
     }
     .navbar.is-hidden{
@@ -79,9 +79,7 @@
       padding:16px 24px;
       border-radius:8px;
       transition:background .5s cubic-bezier(.4,0,.2,1),
-                 box-shadow .5s cubic-bezier(.4,0,.2,1),
-                 border-color .5s cubic-bezier(.4,0,.2,1);
-      border-bottom:1px solid transparent;
+                 box-shadow .5s cubic-bezier(.4,0,.2,1);
     }
     .navbar__logo{
       width:88px;
@@ -144,7 +142,13 @@
     /* --- Solid state (on scroll) --- */
     .navbar.is-solid .navbar__inner{
       background:var(--soft-alabaster);
-      border-bottom-color:rgba(136,77,40,0.15);
+    }
+    .navbar.is-solid::after{
+      content:'';
+      display:block;
+      margin:0 24px;
+      height:1px;
+      background:rgba(136,77,40,0.2);
     }
     .navbar.is-solid .navbar__menu a{
       color:var(--earth-clay);
@@ -186,7 +190,7 @@
 
     /* Spacer to push card below navbar */
     .hero-spacer{
-      height:128px;
+      height:106px;
     }
 
     /* ========= HERO CARD ========= */
