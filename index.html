@@ -63,13 +63,15 @@
       position:fixed;
       top:0;left:0;right:0;
       z-index:100;
-      padding:24px;
+      padding:24px 0;
       transition:padding .4s ease;
     }
     .navbar__inner{
       display:flex;
       align-items:center;
       justify-content:space-between;
+      margin-left:24px;
+      margin-right:calc(24px + var(--scrollbar-w, 0px));
       padding:16px 24px;
       border-radius:8px;
       transition:background .4s ease, box-shadow .4s ease;
@@ -326,9 +328,11 @@
 
       /* Navbar */
       .navbar{
-        padding:12px;
+        padding:12px 0;
       }
       .navbar__inner{
+        margin-left:12px;
+        margin-right:calc(12px + var(--scrollbar-w, 0px));
         padding:12px 16px;
       }
       .navbar__logo{
@@ -538,6 +542,16 @@
   </div>
 
   <script>
+    /* Scrollbar width compensation for fixed navbar */
+    (function(){
+      function setScrollbarVar(){
+        const sw = window.innerWidth - document.documentElement.clientWidth;
+        document.documentElement.style.setProperty('--scrollbar-w', sw + 'px');
+      }
+      setScrollbarVar();
+      window.addEventListener('resize', setScrollbarVar);
+    })();
+
     /* Navbar: transparent → solid on scroll (vastspace pattern) */
     (function(){
       const nav = document.querySelector('.navbar');
