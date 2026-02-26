@@ -80,10 +80,7 @@
       border-radius:8px;
       transition:background .5s cubic-bezier(.4,0,.2,1),
                  box-shadow .5s cubic-bezier(.4,0,.2,1),
-                 margin .4s cubic-bezier(.4,0,.2,1),
-                 padding .4s cubic-bezier(.4,0,.2,1),
-                 border-radius .4s cubic-bezier(.4,0,.2,1),
-                 border-color .4s cubic-bezier(.4,0,.2,1);
+                 border-color .5s cubic-bezier(.4,0,.2,1);
       border-bottom:1px solid transparent;
     }
     .navbar__logo{
@@ -145,15 +142,8 @@
     .cta-btn .cta-mobile{display:none}
 
     /* --- Solid state (on scroll) --- */
-    .navbar.is-solid{
-      padding:0;
-    }
     .navbar.is-solid .navbar__inner{
       background:var(--soft-alabaster);
-      margin-left:0;
-      margin-right:0;
-      padding:16px 48px;
-      border-radius:0;
       border-bottom-color:rgba(136,77,40,0.15);
     }
     .navbar.is-solid .navbar__menu a{
@@ -328,9 +318,6 @@
         max-width:1392px;
         margin-left:auto;
         margin-right:auto;
-      }
-      .navbar.is-solid .navbar__inner{
-        max-width:none;
       }
       .hero-top__h1{
         font-size:62px;
@@ -563,44 +550,70 @@
   </div>
 
   <script>
-    /* Navbar: vastspace-style hide/show + transparent→solid */
+    /* Navbar scroll behaviour
+       - At top: transparent, visible
+       - Scroll DOWN first time: transparent navbar scrolls away naturally
+       - Scroll UP (anywhere): opaque navbar slides in from top
+       - Scroll DOWN again: opaque navbar slides back out
+       - Back at very top: revert to transparent
+    */
     (function(){
       const nav = document.querySelector('.navbar');
-      const SOLID_TRIGGER = 80;   /* px: when to go opaque */
-      const HIDE_DELTA    = 8;    /* px: min scroll distance to trigger hide */
-      let lastY = window.scrollY;
-      let hidden = false;
-      let solid  = false;
-      let ticking = false;
+      const TRIGGER = 80;
+      const DELTA   = 5;
+      let lastY     = window.scrollY;
+      let ticking   = false;
+      /* States: 'top' | 'scrolled-away' | 'solid-visible' | 'solid-hidden' */
+      let state = 'top';
 
       function update(){
         const y = window.scrollY;
         const delta = y - lastY;
-
-        /* transparent ↔ solid */
-        const shouldBeSolid = y > SOLID_TRIGGER;
-        if(shouldBeSolid !== solid){
-          solid = shouldBeSolid;
-          nav.classList.toggle('is-solid', solid);
-        }
-
-        /* hide on scroll-down, show on scroll-up */
-        if(delta > HIDE_DELTA && y > SOLID_TRIGGER && !hidden){
-          hidden = true;
-          nav.classList.add('is-hidden');
-        } else if(delta < -HIDE_DELTA && hidden){
-          hidden = false;
-          nav.classList.remove('is-hidden');
-        }
-
-        /* At very top: always visible + transparent */
-        if(y <= 0){
-          hidden = false;
-          nav.classList.remove('is-hidden');
-        }
-
         lastY = y;
         ticking = false;
+
+        /* Back at very top → transparent, visible */
+        if(y <= 10){
+          state = 'top';
+          nav.classList.remove('is-solid','is-hidden');
+          return;
+        }
+
+        switch(state){
+          case 'top':
+            /* Scrolling down past trigger: just let it scroll away */
+            if(delta > 0 && y > TRIGGER){
+              state = 'scrolled-away';
+              nav.classList.add('is-hidden');
+              /* Don't add is-solid yet — it left as transparent */
+            }
+            break;
+
+          case 'scrolled-away':
+            /* First scroll up: bring in the opaque navbar */
+            if(delta < -DELTA){
+              state = 'solid-visible';
+              nav.classList.add('is-solid');
+              nav.classList.remove('is-hidden');
+            }
+            break;
+
+          case 'solid-visible':
+            /* Scroll down: hide opaque navbar */
+            if(delta > DELTA){
+              state = 'solid-hidden';
+              nav.classList.add('is-hidden');
+            }
+            break;
+
+          case 'solid-hidden':
+            /* Scroll up: show opaque navbar again */
+            if(delta < -DELTA){
+              state = 'solid-visible';
+              nav.classList.remove('is-hidden');
+            }
+            break;
+        }
       }
 
       window.addEventListener('scroll', function(){
@@ -609,7 +622,6 @@
           requestAnimationFrame(update);
         }
       }, {passive:true});
-      update();
     })();
   </script>
 </body>
