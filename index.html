@@ -263,24 +263,29 @@
     /* ---- Portrait Cards Row ---- */
     .portraits{
       display:flex;
-      gap:8px;
+      gap:var(--grid-gutter);
       align-items:flex-start;
-      padding:0 0 0 0;
-      margin-bottom:-24px;
+      padding:0 64px;
+      /* Desktop: visually continues hero-card */
+      background:var(--soft-alabaster);
+      margin:0 24px;
+      border-radius:0 0 8px 8px;
+    }
+    /* Hero-card loses bottom radius since portraits continue it */
+    .hero-card{
+      border-radius:8px 8px 0 0;
     }
     .portrait-col{
-      width:443px;
-      flex-shrink:0;
+      flex:1;
+      min-width:0;
       display:flex;
       flex-direction:column;
-      gap:36px;
+      gap:24px;
     }
     .portrait-col:nth-child(1){
-      padding-left:56px;
       padding-bottom:454px;
     }
     .portrait-col:nth-child(2){
-      padding-right:56px;
       padding-top:360px;
       padding-bottom:94px;
     }
@@ -288,12 +293,17 @@
       padding-top:240px;
     }
 
+    /* Portrait card wrapper (transparent on desktop, card on mobile) */
+    .portrait-card{
+      display:contents; /* desktop: no extra wrapper */
+    }
+
     /* Image frame */
     .img-frame{
       background:var(--sun-kissed-terra);
       padding:12px;
-      width:387px;
-      height:537px;
+      width:100%;
+      aspect-ratio:387/537;
     }
     .img-frame img{
       width:100%;
@@ -309,7 +319,6 @@
       font-size:18px;
       line-height:1.15;
       color:var(--earth-clay);
-      max-width:363px;
       text-align:left;
     }
 
@@ -321,6 +330,11 @@
         margin-right:auto;
       }
       .navbar__inner{
+        max-width:1392px;
+        margin-left:auto;
+        margin-right:auto;
+      }
+      .portraits{
         max-width:1392px;
         margin-left:auto;
         margin-right:auto;
@@ -377,6 +391,7 @@
       /* Hero card */
       .hero-card{
         margin:0 12px;
+        border-radius:8px;
       }
 
       /* Top section stacks vertically on mobile */
@@ -410,40 +425,40 @@
         margin-bottom:16px;
       }
 
-      /* Portrait cards stack */
+      /* Portrait section: transparent so video shows */
       .portraits{
         flex-direction:column;
         align-items:stretch;
-        gap:0;
-        margin-bottom:0;
+        gap:16px;
+        background:transparent;
+        margin:16px 12px 0;
+        border-radius:0;
+        padding:0;
       }
       .portrait-col{
         width:100%;
-        padding:12px !important;
-        padding-top:12px !important;
-        padding-bottom:12px !important;
+        padding:0 !important;
       }
+      /* Staggered horizontal offset */
       .portrait-col:nth-child(1){
-        padding-right:83px !important;
-        padding-left:12px !important;
+        padding-right:22% !important;
       }
       .portrait-col:nth-child(2){
-        padding-left:83px !important;
-        padding-right:12px !important;
+        padding-left:22% !important;
       }
       .portrait-col:nth-child(3){
-        padding-left:40px !important;
-        padding-right:40px !important;
+        padding-left:10% !important;
+        padding-right:10% !important;
       }
 
-      /* Mobile portrait card style */
-      .portrait-card-mobile{
-        background:var(--soft-alabaster);
-        border-radius:8px;
-        padding:12px 12px 64px;
+      /* Portrait card: visible alabaster card on mobile */
+      .portrait-card{
         display:flex;
         flex-direction:column;
         gap:36px;
+        background:var(--soft-alabaster);
+        border-radius:8px;
+        padding:12px 12px 64px;
       }
 
       /* Mobile: terra cotta frames */
@@ -451,7 +466,6 @@
         background:var(--sun-kissed-terra);
         padding:8px;
         width:100%;
-        height:auto;
         aspect-ratio:267/370;
       }
       .img-frame img{
@@ -460,7 +474,7 @@
 
       .portrait-desc{
         font-size:18px;
-        max-width:256px;
+        max-width:none;
         padding-right:0;
         text-align:left;
         margin:0;
@@ -521,35 +535,42 @@
         </div>
       </div>
 
-      <!-- Portrait Cards -->
-      <div class="portraits">
+    </section>
 
-        <!-- Yvonne -->
-        <div class="portrait-col">
+    <!-- Portrait Cards (outside hero-card on mobile, inside on desktop via CSS) -->
+    <div class="portraits">
+
+      <!-- Yvonne -->
+      <div class="portrait-col">
+        <div class="portrait-card">
           <div class="img-frame">
             <img src="assets/images/Yvonne.png" alt="Yvonne">
           </div>
           <p class="portrait-desc">Based in Berlin, Yvonne is an entrepreneurial spirit dedicated to living life to the fullest. Whether exploring new destinations or enjoying techno music, she believes laughter and adventure are essential for growth. A self-confessed foodie, Yvonne curates our culinary experiences, hiring the best plant-based chefs to ensure our menus are as nourishing as they are delicious.</p>
         </div>
+      </div>
 
-        <!-- Isabel -->
-        <div class="portrait-col">
+      <!-- Isabel -->
+      <div class="portrait-col">
+        <div class="portrait-card">
           <div class="img-frame">
             <img src="assets/images/Isabel.png" alt="Isabel">
           </div>
           <p class="portrait-desc">Living on the Costa del Sol near our Andalusian venues, Isabel blends a rational engineering background with a deep love for spirituality. Passionate about interior design and pottery, she creates spaces that are both beautiful and functional. A natural host, Isabel finds joy in creating warm, welcoming environments. She stays grounded through yoga, swimming, and dancing.</p>
         </div>
+      </div>
 
-        <!-- Humans -->
-        <div class="portrait-col">
+      <!-- Humans -->
+      <div class="portrait-col">
+        <div class="portrait-card">
           <div class="img-frame">
             <img src="assets/images/Humans.png" alt="Our Community">
           </div>
           <p class="portrait-desc">Our vision truly comes alive through the amazing humans we meet. It is the unique mix of inspiring teachers, talented chefs, and open-hearted guests who fill this circle with energy. Together, they create a vibe that is relaxed, kind, and deeply connected. We cherish the lasting friendships formed here and look forward to welcoming you into this vibrant community.</p>
         </div>
-
       </div>
-    </section>
+
+    </div>
 
     <!-- Padding below for scroll space -->
     <div style="height:60vh"></div>
