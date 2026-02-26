@@ -263,9 +263,9 @@
     /* ---- Portrait Cards Row ---- */
     .portraits{
       display:flex;
-      gap:var(--grid-gutter);
+      gap:8px;
       align-items:flex-start;
-      padding:0 64px;
+      padding:0;
       /* Desktop: visually continues hero-card */
       background:var(--soft-alabaster);
       margin:0 24px;
@@ -276,21 +276,25 @@
       border-radius:8px 8px 0 0;
     }
     .portrait-col{
-      flex:1;
-      min-width:0;
+      width:443px;
+      flex-shrink:0;
       display:flex;
       flex-direction:column;
-      gap:24px;
+      gap:36px;
     }
     .portrait-col:nth-child(1){
+      padding-left:56px;
       padding-bottom:454px;
     }
     .portrait-col:nth-child(2){
+      padding-right:56px;
       padding-top:360px;
       padding-bottom:94px;
     }
     .portrait-col:nth-child(3){
+      padding-right:56px;
       padding-top:240px;
+      padding-bottom:214px;
     }
 
     /* Portrait card wrapper (transparent on desktop, card on mobile) */
@@ -302,8 +306,8 @@
     .img-frame{
       background:var(--sun-kissed-terra);
       padding:12px;
-      width:100%;
-      aspect-ratio:387/537;
+      width:387px;
+      height:537px;
     }
     .img-frame img{
       width:100%;
@@ -319,6 +323,7 @@
       font-size:18px;
       line-height:1.15;
       color:var(--earth-clay);
+      padding-right:24px;
       text-align:left;
     }
 
