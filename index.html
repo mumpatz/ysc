@@ -49,6 +49,14 @@
       height:100%;
       object-fit:cover;
     }
+    /* Dark overlay on video – 20% black */
+    .video-bg::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,0.20);
+      pointer-events:none;
+    }
 
     /* ========= NAVBAR ========= */
     .navbar{
@@ -62,10 +70,6 @@
       align-items:center;
       justify-content:space-between;
       padding:16px 24px;
-      border-radius:8px;
-      backdrop-filter:blur(12px);
-      -webkit-backdrop-filter:blur(12px);
-      background:rgba(255,250,239,0.15);
     }
     .navbar__logo{
       width:88px;
@@ -158,7 +162,7 @@
     /* ---- Top section: Logo + Text via CSS Grid ---- */
     .hero-top{
       display:grid;
-      grid-template-columns:665px 1fr;
+      grid-template-columns:1fr 1fr;
       grid-template-rows:auto auto auto;
       column-gap:64px;
       padding:64px;
@@ -265,6 +269,26 @@
       padding-right:23px;
       text-align:center;
       margin:0 auto;
+    }
+
+    /* ========= SUPER WIDE (content stops scaling) ========= */
+    @media(min-width:1600px){
+      .hero-card{
+        max-width:1392px;
+        margin-left:auto;
+        margin-right:auto;
+      }
+      .navbar__inner{
+        max-width:1440px;
+        margin-left:auto;
+        margin-right:auto;
+      }
+      .hero-top__h1{
+        font-size:62px;
+      }
+      .hero-top__copy{
+        font-size:36px;
+      }
     }
 
     /* ========= MOBILE ========= */
