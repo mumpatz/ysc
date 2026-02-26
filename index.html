@@ -105,7 +105,7 @@
     }
     .cta-btn{
       display:inline-block;
-      border:none;
+      border:1px solid var(--soft-alabaster);
       border-radius:100px;
       padding:16px 24px;
       font-family:var(--ff-sans);
@@ -113,15 +113,15 @@
       font-size:16px;
       text-transform:uppercase;
       color:var(--soft-alabaster);
-      background:var(--earth-clay);
+      background:transparent;
       text-decoration:none;
       cursor:pointer;
-      transition:background .25s,color .25s;
+      transition:background .25s,color .25s,border-color .25s;
       letter-spacing:0.3px;
       white-space:nowrap;
     }
     .cta-btn:hover{
-      background:var(--deep-forest);
+      background:rgba(255,250,239,0.15);
     }
 
     /* Burger (mobile only) */
@@ -246,7 +246,7 @@
 
     /* Image frame */
     .img-frame{
-      background:var(--olive-grove);
+      background:var(--sun-kissed-terra);
       padding:12px;
       width:387px;
       height:537px;
@@ -266,9 +266,7 @@
       line-height:1.15;
       color:var(--earth-clay);
       max-width:363px;
-      padding-right:23px;
-      text-align:center;
-      margin:0 auto;
+      text-align:left;
     }
 
     /* ========= SUPER WIDE (content stops scaling) ========= */
@@ -444,7 +442,7 @@
           <li><a href="#">Shop</a></li>
           <li><a href="#">FAQs</a></li>
         </ul>
-        <a href="#" class="cta-btn">See all retreats</a>
+        <a href="#" class="cta-btn">See all our retreats</a>
         <div class="navbar__burger" aria-label="Menu">
           <span></span>
           <span></span>
