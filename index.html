@@ -276,24 +276,23 @@
       border-radius:8px 8px 0 0;
     }
     .portrait-col{
-      flex:1;
+      flex:1 1 0%;
       min-width:0;
       display:flex;
       flex-direction:column;
       gap:36px;
     }
-    /* 56/443 ≈ 12.64% — keeps Figma proportions fluid */
     .portrait-col:nth-child(1){
-      padding-left:12.64%;
+      padding-left:56px;
       padding-bottom:454px;
     }
     .portrait-col:nth-child(2){
-      padding-right:12.64%;
+      padding-right:56px;
       padding-top:360px;
       padding-bottom:94px;
     }
     .portrait-col:nth-child(3){
-      padding-right:12.64%;
+      padding-right:56px;
       padding-top:240px;
       padding-bottom:214px;
     }
@@ -303,7 +302,7 @@
       display:contents; /* desktop: no extra wrapper */
     }
 
-    /* Image frame — fluid width, fixed 12px border, Figma aspect ratio */
+    /* Image frame */
     .img-frame{
       background:var(--sun-kissed-terra);
       padding:12px;
