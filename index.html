@@ -221,13 +221,11 @@
       width:100%;
       height:auto;
     }
-    /* Right column shared inset (28px @ 1440) + vertical trim */
+    /* Right column shared inset (28px @ 1440) */
     .hero-top__label,
     .hero-top__h1,
     .hero-top__copy{
       padding-right:calc(28 / 1440 * 100vw);
-      text-box-trim:both;
-      text-box-edge:cap alphabetic;
     }
     /* Label, H1, Copy in right column */
     .hero-top__label{
@@ -236,6 +234,7 @@
       font-family:var(--ff-sans);
       font-weight:600;
       font-size:16px;
+      line-height:1;
       text-transform:uppercase;
       color:var(--earth-clay);
       margin-bottom:calc(24 / 1440 * 100vw);
@@ -249,6 +248,7 @@
       text-transform:uppercase;
       line-height:1.1;
       color:var(--earth-clay);
+      margin-top:-0.05em;
       margin-bottom:calc(366 / 1440 * 100vw);
     }
     .hero-top__copy{
