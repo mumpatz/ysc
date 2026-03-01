@@ -535,17 +535,23 @@
         margin:0 12px;
       }
       .quote-section__inner{
+        display:flex;
         flex-direction:column;
         gap:16px;
         padding:60px 12px;
-        padding-right:0;
+      }
+      .quote-section__label{
+        grid-column:auto;
       }
       .quote-section__text{
+        grid-column:auto;
         font-size:36px;
         font-weight:600;
         line-height:1.15;
         width:calc(10 / 12 * 100%);
         max-width:none;
+        margin-top:0;
+        padding-right:0;
       }
     }
   </style>
