@@ -443,10 +443,10 @@
     /* Media area */
     .vision-card__media{
       display:flex;
+      flex-wrap:wrap;
       justify-content:space-between;
       align-items:flex-start;
-      gap:24px;
-      margin-bottom:12px;
+      gap:12px;
     }
     .vision-card__desc{
       font-family:var(--ff-sans);
@@ -478,6 +478,7 @@
       align-items:center;
       justify-content:space-between;
       position:relative;
+      width:100%;
       margin-bottom:48px;
     }
     .vision-card__indicators{
@@ -742,31 +743,31 @@
       }
       .vision-card__media{
         flex-direction:column;
-        gap:24px;
+        gap:0;
       }
       .vision-card__img{
         width:100%;
         aspect-ratio:345/506;
-      }
-      .vision-card__desc{
-        width:auto;
-        max-width:239px;
-        font-size:18px;
-        order:2;
-        padding-top:0;
-      }
-      .vision-card__img{
         order:1;
       }
       .vision-card__carousel{
-        justify-content:center;
-        margin-bottom:36px;
+        order:2;
+        justify-content:flex-start;
+        margin-top:12px;
+        margin-bottom:24px;
       }
       .vision-card__arrow{
         display:none;
       }
       .vision-card__indicators{
         position:static;
+      }
+      .vision-card__desc{
+        order:3;
+        width:calc(240 / 345 * 100%);
+        max-width:none;
+        font-size:18px;
+        padding-top:0;
       }
       .vision-card__cta{
         padding:12px 16px;
@@ -923,28 +924,26 @@
           </div>
         </div>
 
-        <!-- Image + description -->
+        <!-- Image + carousel + description -->
         <div class="vision-card__media">
           <p class="vision-card__desc">Seasonal dishes prepared with locally sourced ingredients from our surrounding gardens and farms.</p>
           <div class="vision-card__img">
             <img src="assets/images/image-138.png" alt="Plant-based culinary experience">
           </div>
-        </div>
-
-        <!-- Carousel controls -->
-        <div class="vision-card__carousel">
-          <button class="vision-card__arrow vision-card__arrow--prev" aria-label="Previous">
-            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="-0.5" y="0.5" width="37" height="37" rx="18.5" transform="matrix(-1 0 0 1 37 0)" stroke="#884D28"/><path d="M23.6504 9.69727L14.3496 19L23.6504 28.3008" stroke="#884D28"/></svg>
-          </button>
-          <div class="vision-card__indicators">
-            <span class="vision-card__indicator active"></span>
-            <span class="vision-card__indicator"></span>
-            <span class="vision-card__indicator"></span>
-            <span class="vision-card__indicator"></span>
+          <div class="vision-card__carousel">
+            <button class="vision-card__arrow vision-card__arrow--prev" aria-label="Previous">
+              <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="-0.5" y="0.5" width="37" height="37" rx="18.5" transform="matrix(-1 0 0 1 37 0)" stroke="#884D28"/><path d="M23.6504 9.69727L14.3496 19L23.6504 28.3008" stroke="#884D28"/></svg>
+            </button>
+            <div class="vision-card__indicators">
+              <span class="vision-card__indicator active"></span>
+              <span class="vision-card__indicator"></span>
+              <span class="vision-card__indicator"></span>
+              <span class="vision-card__indicator"></span>
+            </div>
+            <button class="vision-card__arrow vision-card__arrow--next" aria-label="Next">
+              <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="-0.5" y="0.5" width="37" height="37" rx="18.5" transform="matrix(-1 0 0 1 37 0)" stroke="#884D28"/><path d="M23.6504 9.69727L14.3496 19L23.6504 28.3008" stroke="#884D28"/></svg>
+            </button>
           </div>
-          <button class="vision-card__arrow vision-card__arrow--next" aria-label="Next">
-            <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="-0.5" y="0.5" width="37" height="37" rx="18.5" transform="matrix(-1 0 0 1 37 0)" stroke="#884D28"/><path d="M23.6504 9.69727L14.3496 19L23.6504 28.3008" stroke="#884D28"/></svg>
-          </button>
         </div>
 
         <!-- CTA -->
