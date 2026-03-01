@@ -113,6 +113,24 @@
       letter-spacing:0.3px;
       text-shadow:0 2px 16px rgba(0,0,0,0.07);
       transition:color .4s ease, text-shadow .4s ease;
+      position:relative;
+      padding-bottom:12px;
+      text-box-trim:trim-both;
+      text-box-edge:cap alphabetic;
+    }
+    .navbar__menu a::after{
+      content:'';
+      position:absolute;
+      left:50%;
+      bottom:0;
+      width:0;
+      height:1px;
+      background:currentColor;
+      transition:width .35s cubic-bezier(.4,0,.2,1), left .35s cubic-bezier(.4,0,.2,1);
+    }
+    .navbar__menu a:hover::after{
+      width:100%;
+      left:0;
     }
 
     /* --- CTA: Default = transparent state (over video) --- */
@@ -133,10 +151,6 @@
       letter-spacing:0.3px;
       white-space:nowrap;
       box-shadow:0 2px 16px rgba(0,0,0,0.07);
-    }
-    .cta-btn:hover{
-      background:var(--sun-kissed-terra);
-      color:var(--deep-forest);
     }
     /* Mobile CTA text swap */
     .cta-btn .cta-mobile{display:none}
@@ -160,17 +174,10 @@
       color:var(--earth-clay);
       text-shadow:none;
     }
-    .navbar.is-solid .navbar__menu a:hover{
-      color:var(--deep-forest);
-    }
     .navbar.is-solid .cta-btn{
       background:var(--earth-clay);
       color:var(--soft-alabaster);
       box-shadow:none;
-    }
-    .navbar.is-solid .cta-btn:hover{
-      background:var(--sun-kissed-terra);
-      color:var(--deep-forest);
     }
     /* Invert logo to brown when solid (SVG is white) */
     .navbar.is-solid .navbar__logo img{
