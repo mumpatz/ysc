@@ -1077,10 +1077,9 @@
 
     /* Lock menu link widths to hover-state size so letter-spacing animation is layout-neutral */
     document.querySelectorAll('.navbar__menu a').forEach(function(a){
-      var orig = getComputedStyle(a).letterSpacing;
       a.style.letterSpacing = '1.5px';
       a.style.minWidth = a.scrollWidth + 'px';
-      a.style.letterSpacing = orig;
+      a.style.letterSpacing = '';
     });
   </script>
 </body>
