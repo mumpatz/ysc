@@ -983,7 +983,8 @@
     */
     (function(){
       const nav = document.querySelector('.navbar');
-      const TRIGGER = 40;
+      const isMobile = window.innerWidth <= 768;
+      const TRIGGER = isMobile ? 20 : 30;
       const DELTA   = 5;
       let lastY     = window.scrollY;
       let ticking   = false;
