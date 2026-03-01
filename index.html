@@ -438,9 +438,11 @@
       font-size:clamp(28px, 2.5vw, 36px);
       line-height:1.2;
       color:var(--earth-clay);
-      /* Half-leading trim: -(line-height - 1) / 2 = -0.1em
-         Compensates invisible space CSS adds above first line */
+      /* Half-leading trim: CSS adds (lh-1)/2 = 0.1em invisible space
+         above & below text that Figma doesn't include in frame bounds.
+         Negative margins compensate so gap values match Figma exactly. */
       margin-top:-0.1em;
+      margin-bottom:-0.1em;
     }
 
     /* Media area */
