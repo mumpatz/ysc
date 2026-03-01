@@ -1103,7 +1103,7 @@
       logo.addEventListener('click', function(e){
         e.preventDefault();
         idx = (idx + 1) % videos.length;
-        vid.src = videos[idx];
+        vid.querySelector('source').src = videos[idx];
         vid.load();
         vid.play();
       });
