@@ -382,7 +382,7 @@
       display:flex;
       flex-direction:column;
       gap:16px;
-      margin-bottom:calc(108 / 1440 * 100vw);
+      margin-bottom:calc(48 / 1440 * 100vw);
     }
     .vision-card__header-labels{
       display:flex;
@@ -408,18 +408,19 @@
       opacity:0.3;
     }
 
-    /* Text blocks */
+    /* Text blocks — right column (second 12 of 24) */
     .vision-card__texts{
       display:flex;
       flex-direction:column;
       gap:48px;
-      max-width:calc(640 / 1344 * 100%);
+      margin-left:calc(50% + 20px);
+      max-width:calc(50% - 20px);
       margin-bottom:calc(108 / 1440 * 100vw);
     }
     .vision-card__block{
       display:flex;
       flex-direction:column;
-      gap:26px;
+      gap:14px;
     }
     .vision-card__label{
       font-family:var(--ff-sans);
@@ -722,6 +723,7 @@
       .vision-card__texts{
         max-width:none;
         width:92%;
+        margin-left:0;
         margin-bottom:64px;
         gap:36px;
       }
