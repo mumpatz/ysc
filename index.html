@@ -438,9 +438,8 @@
       font-size:clamp(28px, 2.5vw, 36px);
       line-height:1.2;
       color:var(--earth-clay);
-      /* Trim top half-leading so Figma gap values work directly.
-         Formula: -(line-height - 1) / 2 = -(1.2 - 1) / 2 = -0.1em */
-      margin-top:-0.1em;
+      /* TEST: large negative margin to verify CSS is applying */
+      margin-top:-30px;
     }
 
     /* Media area */
