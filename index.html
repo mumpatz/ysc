@@ -337,32 +337,31 @@
 
     /* ========= QUOTE SECTION ========= */
     .quote-section{
-      padding:10px 48px;
+      padding:calc(108 / 1440 * 100vw) 24px calc(126 / 1440 * 100vw);
     }
     .quote-section__inner{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      padding-right:calc(28 / 1440 * 100vw);
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      column-gap:40px;
       color:var(--soft-alabaster);
       text-shadow:0 0 94px rgba(0,0,0,0.25);
       text-transform:uppercase;
     }
     .quote-section__label{
+      grid-column:1;
       font-family:var(--ff-sans);
       font-weight:600;
       font-size:16px;
       line-height:1;
-      flex-shrink:0;
     }
     .quote-section__text{
+      grid-column:2;
       font-family:var(--ff-sans);
       font-weight:700;
-      font-size:clamp(36px, 4.3vw, 62px);
+      font-size:clamp(44px, 4.3vw, 62px);
       line-height:1.1;
-      width:640px;
-      max-width:50%;
-      flex-shrink:0;
+      margin-top:-0.15em;
+      padding-right:calc(28 / 1440 * 100vw);
     }
 
     /* ========= SUPER WIDE (content stops scaling) ========= */
