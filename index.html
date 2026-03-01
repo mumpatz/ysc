@@ -382,7 +382,7 @@
       display:flex;
       flex-direction:column;
       gap:16px;
-      margin-bottom:calc(48 / 1440 * 100vw);
+      margin-bottom:64px;
     }
     .vision-card__header-labels{
       display:flex;
@@ -408,19 +408,21 @@
       opacity:0.3;
     }
 
-    /* Text blocks — right column (second 12 of 24) */
+    /* Text blocks — right-aligned (same position as hero copy column) */
     .vision-card__texts{
       display:flex;
       flex-direction:column;
       gap:48px;
-      margin-left:calc(50% + 20px);
+      align-self:flex-end;
+      width:640px;
       max-width:calc(50% - 20px);
+      padding-right:calc(28 / 1440 * 100vw);
       margin-bottom:calc(108 / 1440 * 100vw);
     }
     .vision-card__block{
       display:flex;
       flex-direction:column;
-      gap:14px;
+      gap:26px;
     }
     .vision-card__label{
       font-family:var(--ff-sans);
@@ -448,9 +450,9 @@
     }
     .vision-card__desc{
       font-family:var(--ff-sans);
-      font-weight:500;
+      font-weight:600;
       font-size:18px;
-      line-height:1.3;
+      line-height:1.15;
       color:var(--earth-clay);
       width:calc(239 / 1344 * 100%);
       flex-shrink:0;
@@ -721,9 +723,10 @@
       .vision-card__header-label--desktop{display:none}
       .vision-card__header-label--mobile{display:inline}
       .vision-card__texts{
+        align-self:flex-start;
         max-width:none;
         width:92%;
-        margin-left:0;
+        padding-right:0;
         margin-bottom:64px;
         gap:36px;
       }
@@ -902,11 +905,11 @@
         <div class="vision-card__texts">
           <div class="vision-card__block">
             <span class="vision-card__label">Sanctuary for the Soul</span>
-            <p class="vision-card__copy">A place where you can slow down, reconnect with your inner self, and rediscover what truly matters. Surrounded by nature, guided by intention.</p>
+            <p class="vision-card__copy">We curate venues hand-picked for their unique energy and connection to nature. From the sun-drenched coast of Casa Erica and the mountains of La Viñuela in Spain, to the rustic charm of Olea in Italy and the wild Forest of Lithuania, each location offers a space to disconnect from the noise and reconnect with the earth.</p>
           </div>
           <div class="vision-card__block">
             <span class="vision-card__label">Culinary Art &amp; Nourishment</span>
-            <p class="vision-card__copy">Our plant-based menus are crafted by world-class chefs who understand that nourishment is a form of love. Every meal is a celebration.</p>
+            <p class="vision-card__copy">We curate venues hand-picked for their unique energy and connection to nature. From the sun-drenched coast of Casa Erica and the mountains of La Viñuela in Spain, to the rustic charm of Olea in Italy and the wild Forest of Lithuania, each location offers a space to disconnect from the noise and reconnect with the earth.</p>
           </div>
         </div>
 
