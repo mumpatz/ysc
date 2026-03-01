@@ -337,12 +337,13 @@
 
     /* ========= QUOTE SECTION ========= */
     .quote-section{
-      padding:calc(108 / 1440 * 100vw) 48px calc(126 / 1440 * 100vw);
+      margin:0 24px;
     }
     .quote-section__inner{
       display:grid;
       grid-template-columns:1fr 1fr;
       column-gap:40px;
+      padding:calc(108 / 1440 * 100vw) 24px calc(126 / 1440 * 100vw);
       color:var(--soft-alabaster);
       text-shadow:0 0 94px rgba(0,0,0,0.25);
       text-transform:uppercase;
@@ -387,9 +388,10 @@
       .hero-top__copy{
         font-size:36px;
       }
-      .quote-section__inner{
-        max-width:1344px;
-        margin:0 auto;
+      .quote-section{
+        max-width:1392px;
+        margin-left:auto;
+        margin-right:auto;
       }
     }
 
@@ -530,11 +532,12 @@
 
       /* Quote section mobile */
       .quote-section{
-        padding:60px 24px;
+        margin:0 12px;
       }
       .quote-section__inner{
         flex-direction:column;
         gap:16px;
+        padding:60px 12px;
         padding-right:0;
       }
       .quote-section__text{
