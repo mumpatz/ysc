@@ -380,9 +380,13 @@
     /* Header bar */
     .vision-card__header{
       display:flex;
-      align-items:center;
+      flex-direction:column;
       gap:16px;
       margin-bottom:calc(108 / 1440 * 100vw);
+    }
+    .vision-card__header-labels{
+      display:flex;
+      position:relative;
     }
     .vision-card__header-label{
       font-family:var(--ff-sans);
@@ -394,8 +398,11 @@
       white-space:nowrap;
     }
     .vision-card__header-label--mobile{display:none}
+    .vision-card__header-label--right{
+      position:absolute;
+      left:calc(16 / 24 * 100%);
+    }
     .vision-card__header-line{
-      flex:1;
       height:1px;
       background:var(--earth-clay);
       opacity:0.3;
@@ -881,10 +888,12 @@
 
         <!-- Header bar -->
         <div class="vision-card__header">
-          <span class="vision-card__header-label vision-card__header-label--desktop">Yoga Spirit Circle</span>
-          <span class="vision-card__header-label vision-card__header-label--mobile">Upcoming Retreats</span>
-          <span class="vision-card__header-line"></span>
-          <span class="vision-card__header-label vision-card__header-label--desktop">Our Vision</span>
+          <div class="vision-card__header-labels">
+            <span class="vision-card__header-label vision-card__header-label--desktop">Yoga Spirit Circle</span>
+            <span class="vision-card__header-label vision-card__header-label--mobile">Upcoming Retreats</span>
+            <span class="vision-card__header-label vision-card__header-label--desktop vision-card__header-label--right">Our Vision</span>
+          </div>
+          <div class="vision-card__header-line"></div>
         </div>
 
         <!-- Text blocks -->
