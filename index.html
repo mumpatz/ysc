@@ -1092,6 +1092,36 @@
       a.style.letterSpacing = '';
     });
 
+    /* Laggy scroll parallax for hero-card elements */
+    (function(){
+      var els = document.querySelectorAll('.hero-top__logo, .hero-top__label, .hero-top__h1, .hero-top__copy, .portrait-col');
+      els.forEach(function(el){
+        el.style.willChange = 'transform';
+      });
+      var currentY = [];
+      var targetY = [];
+      els.forEach(function(){ currentY.push(0); targetY.push(0); });
+      var ease = 0.08; // lower = laggier
+      var raf;
+      function update(){
+        var scrollTop = window.pageYOffset;
+        var vh = window.innerHeight;
+        els.forEach(function(el, i){
+          var rect = el.getBoundingClientRect();
+          var center = rect.top + rect.height / 2;
+          // How far from viewport center (normalised -1 to 1)
+          var ratio = (center - vh / 2) / (vh / 2);
+          // Target offset: elements below center lag behind (positive translateY)
+          targetY[i] = ratio * 40; // max 40px offset
+          // Lerp
+          currentY[i] += (targetY[i] - currentY[i]) * ease;
+          el.style.transform = 'translateY(' + currentY[i].toFixed(2) + 'px)';
+        });
+        raf = requestAnimationFrame(update);
+      }
+      update();
+    })();
+
     /* Toggle background video on logo click */
     (function(){
       var videos = [
