@@ -335,6 +335,35 @@
       text-align:left;
     }
 
+    /* ========= QUOTE SECTION ========= */
+    .quote-section{
+      padding:10px 48px;
+    }
+    .quote-section__inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      padding-right:calc(28 / 1440 * 100vw);
+      color:var(--soft-alabaster);
+      text-transform:uppercase;
+    }
+    .quote-section__label{
+      font-family:var(--ff-sans);
+      font-weight:600;
+      font-size:16px;
+      line-height:1;
+      flex-shrink:0;
+    }
+    .quote-section__text{
+      font-family:var(--ff-sans);
+      font-weight:700;
+      font-size:clamp(36px, 4.3vw, 62px);
+      line-height:1.1;
+      width:640px;
+      max-width:50%;
+      flex-shrink:0;
+    }
+
     /* ========= SUPER WIDE (content stops scaling) ========= */
     @media(min-width:1600px){
       .hero-card{
@@ -494,6 +523,23 @@
         margin:0;
         width:92%;
       }
+
+      /* Quote section mobile */
+      .quote-section{
+        padding:60px 24px;
+      }
+      .quote-section__inner{
+        flex-direction:column;
+        gap:16px;
+        padding-right:0;
+      }
+      .quote-section__text{
+        font-size:36px;
+        font-weight:600;
+        line-height:1.15;
+        width:calc(10 / 12 * 100%);
+        max-width:none;
+      }
     }
   </style>
 </head>
@@ -586,6 +632,14 @@
       </div>
 
     </div>
+
+    <!-- ===== QUOTE SECTION ===== -->
+    <section class="quote-section">
+      <div class="quote-section__inner">
+        <span class="quote-section__label">A shared journey</span>
+        <p class="quote-section__text">Where the noise fades and the soul finds space to breathe.</p>
+      </div>
+    </section>
 
     <!-- Padding below for scroll space -->
     <div style="height:60vh"></div>
