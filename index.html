@@ -67,13 +67,18 @@
       transition:transform .35s cubic-bezier(.4,0,.2,1);
       will-change:transform;
     }
-    .navbar:not(.is-solid)::before{
+    .navbar::before{
       content:'';
       position:absolute;
-      left:0;right:0;bottom:0;
+      left:0;right:0;top:100%;
       height:80px;
       background:linear-gradient(to bottom,rgba(0,0,0,0.06),transparent);
       pointer-events:none;
+      opacity:1;
+      transition:opacity .5s ease;
+    }
+    .navbar.is-solid::before{
+      opacity:0;
     }
     .navbar.is-hidden{
       transform:translateY(-100%);
