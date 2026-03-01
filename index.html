@@ -1074,6 +1074,11 @@
         }
       }, {passive:true});
     })();
+
+    /* Lock menu link widths so letter-spacing hover doesn't shift neighbours */
+    document.querySelectorAll('.navbar__menu a').forEach(function(a){
+      a.style.minWidth = a.offsetWidth + 'px';
+    });
   </script>
 </body>
 </html>
