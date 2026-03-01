@@ -78,7 +78,6 @@
       margin-right:24px;
       padding:16px 24px;
       border-radius:8px;
-      box-shadow:0 4px 24px rgba(0,0,0,0.08);
       transition:background .5s cubic-bezier(.4,0,.2,1),
                  box-shadow .5s cubic-bezier(.4,0,.2,1),
                  border-radius .5s cubic-bezier(.4,0,.2,1);
@@ -91,6 +90,7 @@
     .navbar__logo img{
       width:100%;
       height:100%;
+      filter:drop-shadow(0 2px 8px rgba(0,0,0,0.15));
       transition:filter .4s ease;
     }
     .navbar__right{
@@ -111,7 +111,8 @@
       color:#FFFFFF;
       text-decoration:none;
       letter-spacing:0.3px;
-      transition:color .4s ease;
+      text-shadow:0 2px 8px rgba(0,0,0,0.15);
+      transition:color .4s ease, text-shadow .4s ease;
     }
 
     /* --- CTA: Default = transparent state (over video) --- */
@@ -128,9 +129,10 @@
       background:var(--soft-alabaster);
       text-decoration:none;
       cursor:pointer;
-      transition:background .4s ease, color .4s ease, border-color .4s ease;
+      transition:background .4s ease, color .4s ease, border-color .4s ease, box-shadow .4s ease;
       letter-spacing:0.3px;
       white-space:nowrap;
+      box-shadow:0 2px 8px rgba(0,0,0,0.15);
     }
     .cta-btn:hover{
       background:var(--sun-kissed-terra);
@@ -156,6 +158,7 @@
     }
     .navbar.is-solid .navbar__menu a{
       color:var(--earth-clay);
+      text-shadow:none;
     }
     .navbar.is-solid .navbar__menu a:hover{
       color:var(--deep-forest);
@@ -163,6 +166,7 @@
     .navbar.is-solid .cta-btn{
       background:var(--earth-clay);
       color:var(--soft-alabaster);
+      box-shadow:none;
     }
     .navbar.is-solid .cta-btn:hover{
       background:var(--sun-kissed-terra);
