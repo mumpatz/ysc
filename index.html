@@ -115,13 +115,10 @@
       font-weight:600;
       font-size:16px;
       text-transform:uppercase;
-      color:var(--soft-alabaster);
+      color:#FFFFFF;
       text-decoration:none;
       letter-spacing:0.3px;
-      transition:opacity .2s, color .4s ease;
-    }
-    .navbar__menu a:hover{
-      opacity:.7;
+      transition:color .4s ease;
     }
 
     /* --- CTA: Default = transparent state (over video) --- */
@@ -143,7 +140,8 @@
       white-space:nowrap;
     }
     .cta-btn:hover{
-      opacity:.85;
+      background:var(--sun-kissed-terra);
+      color:var(--deep-forest);
     }
     /* Mobile CTA text swap */
     .cta-btn .cta-mobile{display:none}
@@ -165,9 +163,16 @@
     .navbar.is-solid .navbar__menu a{
       color:var(--earth-clay);
     }
+    .navbar.is-solid .navbar__menu a:hover{
+      color:var(--deep-forest);
+    }
     .navbar.is-solid .cta-btn{
       background:var(--earth-clay);
       color:var(--soft-alabaster);
+    }
+    .navbar.is-solid .cta-btn:hover{
+      background:var(--sun-kissed-terra);
+      color:var(--deep-forest);
     }
     /* Invert logo to brown when solid (SVG is white) */
     .navbar.is-solid .navbar__logo img{
