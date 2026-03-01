@@ -103,6 +103,10 @@
       list-style:none;
       gap:32px;
     }
+    .navbar__menu li{
+      display:inline-flex;
+      justify-content:center;
+    }
     .navbar__menu a{
       font-family:var(--ff-sans);
       font-weight:600;
@@ -112,11 +116,15 @@
       text-decoration:none;
       letter-spacing:0.3px;
       text-shadow:0 2px 16px rgba(0,0,0,0.07);
-      transition:color .4s ease, text-shadow .4s ease;
+      transition:color .4s ease, text-shadow .4s ease, letter-spacing .7s cubic-bezier(.2,0,.1,1);
       position:relative;
       padding-bottom:4px;
       text-box-trim:trim-both;
       text-box-edge:cap alphabetic;
+      text-align:center;
+    }
+    .navbar__menu a:hover{
+      letter-spacing:0.46px;
     }
     .navbar__menu a::after{
       content:'';
