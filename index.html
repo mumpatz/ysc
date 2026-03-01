@@ -71,6 +71,7 @@
       transform:translateY(-100%);
     }
     .navbar__inner{
+      position:relative;
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -175,12 +176,12 @@
       border-radius:0;
       box-shadow:none;
     }
-    .navbar.is-solid::after{
+    .navbar.is-solid .navbar__inner::after{
       content:'';
-      display:block;
-      width:calc(100% - 96px);
-      max-width:1344px;
-      margin:0 auto;
+      position:absolute;
+      bottom:-1px;
+      left:24px;
+      right:24px;
       height:1px;
       background:var(--earth-clay);
     }
