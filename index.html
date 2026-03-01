@@ -431,6 +431,9 @@
       line-height:1;
       text-transform:uppercase;
       color:var(--earth-clay);
+      /* Trim to cap-height/baseline so gap values match Figma */
+      text-box-trim:both;
+      text-box-edge:cap alphabetic;
     }
     .vision-card__copy{
       font-family:var(--ff-serif);
@@ -438,11 +441,11 @@
       font-size:clamp(28px, 2.5vw, 36px);
       line-height:1.2;
       color:var(--earth-clay);
-      /* Half-leading trim: CSS adds (lh-1)/2 = 0.1em invisible space
-         above & below text that Figma doesn't include in frame bounds.
-         Negative margins compensate so gap values match Figma exactly. */
-      margin-top:-0.1em;
-      margin-bottom:-0.1em;
+      /* Trim to cap-height/baseline so gap values match Figma.
+         CSS line-boxes include ~14.6px above cap and ~13.5px below
+         baseline at 36px — Figma measures between cap/baseline. */
+      text-box-trim:both;
+      text-box-edge:cap alphabetic;
     }
 
     /* Media area */
