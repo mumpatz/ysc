@@ -67,6 +67,10 @@
       transition:transform .35s cubic-bezier(.4,0,.2,1);
       will-change:transform;
     }
+    /* Prevent menu-open navbar from hiding via scroll */
+    .navbar.menu-open{
+      transform:none !important;
+    }
     .navbar.is-hidden{
       transform:translateY(-100%);
     }
@@ -241,56 +245,28 @@
       transform:translateY(-10px) rotate(-45deg);
     }
 
-    /* ========= MOBILE MENU OVERLAY ========= */
-    .mobile-menu{
+    /* ========= MOBILE MENU ========= */
+    /* The menu is a panel inside .navbar that expands downward.
+       It sits behind __inner via z-index, sharing the same bg.
+       A wrapper clips it so the slide-down is clean. */
+    .navbar__menu-panel{
+      display:none; /* shown only on mobile via media query */
+    }
+
+    /* Backdrop behind everything */
+    .navbar__menu-backdrop{
       display:none;
-      position:fixed;
-      top:0;left:0;right:0;
-      z-index:99;
-      padding-top:74px; /* below navbar */
-      pointer-events:none;
-    }
-    .mobile-menu.is-visible{
-      pointer-events:auto;
-    }
-    .mobile-menu__panel{
-      background:var(--soft-alabaster);
-      margin:0 12px;
-      border-radius:0 0 8px 8px;
-      padding:0 12px 40px;
-      transform:translateY(-110%);
-      transition:transform .45s cubic-bezier(.4,0,.2,1);
-    }
-    .mobile-menu.is-visible .mobile-menu__panel{
-      transform:translateY(0);
-    }
-    .mobile-menu__item{
-      display:block;
-      padding:28px 0;
-      font-family:var(--ff-sans);
-      font-weight:600;
-      font-size:16px;
-      line-height:1;
-      text-transform:uppercase;
-      letter-spacing:0.5px;
-      color:var(--earth-clay);
-      text-decoration:none;
-      border-bottom:1px solid var(--earth-clay);
-    }
-    .mobile-menu__item:last-child{
-      border-bottom:none;
-    }
-    /* Backdrop */
-    .mobile-menu__backdrop{
       position:fixed;
       inset:0;
       background:rgba(0,0,0,0.3);
       opacity:0;
-      transition:opacity .45s ease;
-      z-index:-1;
+      transition:opacity .4s ease;
+      z-index:98;
+      pointer-events:none;
     }
-    .mobile-menu.is-visible .mobile-menu__backdrop{
+    .navbar__menu-backdrop.is-visible{
       opacity:1;
+      pointer-events:auto;
     }
 
     /* ========= CONTENT LAYER ========= */
@@ -715,10 +691,15 @@
         margin-left:12px;
         margin-right:12px;
         padding:12px 16px;
+        z-index:2; /* above the menu panel */
       }
       .navbar.is-solid .navbar__inner::after{
         left:12px;
         right:12px;
+      }
+      /* Hide the solid-state bottom line when menu is open (panel has its own) */
+      .navbar.menu-open .navbar__inner::after{
+        display:none;
       }
       .navbar__logo{
         width:66px;
@@ -730,8 +711,74 @@
       .navbar__burger{
         display:flex;
       }
-      .mobile-menu{
+
+      /* Mobile menu panel */
+      .navbar__menu-panel{
         display:block;
+        position:absolute;
+        top:0;left:12px;right:12px;
+        background:var(--soft-alabaster);
+        border-radius:0 0 8px 8px;
+        z-index:1; /* behind __inner */
+        overflow:hidden;
+        /* Collapsed: same height as navbar__inner so it hides behind it */
+        max-height:62px; /* matches navbar__inner height */
+        transition:max-height .45s cubic-bezier(.4,0,.2,1);
+        pointer-events:none;
+      }
+      .navbar.menu-open .navbar__menu-panel{
+        max-height:500px; /* enough to show all items */
+        pointer-events:auto;
+      }
+      /* The line at the bottom of the panel */
+      .navbar__menu-panel::after{
+        content:'';
+        position:absolute;
+        bottom:0;
+        left:12px;
+        right:12px;
+        height:1px;
+        background:var(--earth-clay);
+      }
+      /* Menu items inside panel, pushed below the navbar row */
+      .navbar__menu-panel-inner{
+        padding:0 12px 32px;
+        margin-top:62px; /* push below navbar__inner */
+      }
+      .navbar__menu-item{
+        display:block;
+        padding:24px 0;
+        font-family:var(--ff-sans);
+        font-weight:600;
+        font-size:16px;
+        line-height:1;
+        text-transform:uppercase;
+        letter-spacing:0.5px;
+        color:var(--earth-clay);
+        text-decoration:none;
+        border-bottom:1px solid var(--earth-clay);
+      }
+      .navbar__menu-item:last-child{
+        border-bottom:none;
+      }
+
+      /* Backdrop */
+      .navbar__menu-backdrop{
+        display:block;
+      }
+
+      /* When menu is open, force solid state visuals */
+      .navbar.menu-open .navbar__inner{
+        background:var(--soft-alabaster);
+        border-radius:8px 8px 0 0;
+      }
+      .navbar.menu-open .navbar__logo img{
+        filter:brightness(0) saturate(100%) invert(30%) sepia(60%) saturate(700%) hue-rotate(350deg) brightness(80%);
+      }
+      .navbar.menu-open .cta-btn{
+        background:var(--earth-clay);
+        color:var(--soft-alabaster);
+        box-shadow:none;
       }
       .navbar__right{
         gap:12px;
@@ -961,18 +1008,19 @@
         </div>
       </div>
     </div>
+    <!-- Mobile menu panel (sits behind __inner, expands down) -->
+    <div class="navbar__menu-panel" id="mobileMenuPanel">
+      <div class="navbar__menu-panel-inner">
+        <a href="#" class="navbar__menu-item">Retreats</a>
+        <a href="#" class="navbar__menu-item">Our Story</a>
+        <a href="#" class="navbar__menu-item">Shop</a>
+        <a href="#" class="navbar__menu-item">FAQs</a>
+      </div>
+    </div>
   </nav>
 
-  <!-- ===== MOBILE MENU ===== -->
-  <div class="mobile-menu" id="mobileMenu">
-    <div class="mobile-menu__panel">
-      <a href="#" class="mobile-menu__item">Retreats</a>
-      <a href="#" class="mobile-menu__item">Our Story</a>
-      <a href="#" class="mobile-menu__item">Shop</a>
-      <a href="#" class="mobile-menu__item">FAQs</a>
-    </div>
-    <div class="mobile-menu__backdrop" id="mobileMenuBackdrop"></div>
-  </div>
+  <!-- Mobile menu backdrop -->
+  <div class="navbar__menu-backdrop" id="mobileMenuBackdrop"></div>
 
   <!-- ===== CONTENT LAYER ===== -->
   <div class="content">
@@ -1184,7 +1232,7 @@
     /* Mobile menu toggle */
     (function(){
       var burger = document.querySelector('.navbar__burger');
-      var menu = document.getElementById('mobileMenu');
+      var panel = document.getElementById('mobileMenuPanel');
       var backdrop = document.getElementById('mobileMenuBackdrop');
       var nav = document.querySelector('.navbar');
       var isOpen = false;
@@ -1192,16 +1240,17 @@
       function openMenu(){
         isOpen = true;
         burger.classList.add('is-open');
-        menu.classList.add('is-visible');
+        nav.classList.add('menu-open');
+        backdrop.classList.add('is-visible');
         document.body.style.overflow = 'hidden';
-        /* Force navbar to solid state when menu is open */
-        nav.classList.add('is-solid');
+        /* Ensure navbar is visible and solid-styled */
         nav.classList.remove('is-hidden');
       }
       function closeMenu(){
         isOpen = false;
         burger.classList.remove('is-open');
-        menu.classList.remove('is-visible');
+        nav.classList.remove('menu-open');
+        backdrop.classList.remove('is-visible');
         document.body.style.overflow = '';
       }
 
@@ -1211,7 +1260,7 @@
       });
       backdrop.addEventListener('click', closeMenu);
       /* Close on menu item click */
-      menu.querySelectorAll('.mobile-menu__item').forEach(function(item){
+      panel.querySelectorAll('.navbar__menu-item').forEach(function(item){
         item.addEventListener('click', closeMenu);
       });
     })();
