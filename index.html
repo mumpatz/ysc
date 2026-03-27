@@ -1267,18 +1267,18 @@
           0
         );
 
-        /* 2. Items: pure motion, no opacity. All start compressed
-              near the top. Larger initial offset for later items
-              (Retreats starts furthest away). Panel overflow:hidden
-              masks them until the panel grows enough. */
+        /* 2. Items: pure motion, no opacity.
+              DOM order: i=0 Retreats, i=1 Our Story, i=2 Shop, i=3 FAQs.
+              FAQs appears first (bottom, small offset, early start).
+              Retreats appears last (top, huge offset, late start). */
+        var offsets  = [-280, -200, -100, -40]; /* Retreats, Story, Shop, FAQs */
+        var delays   = [0.55, 0.35, 0.15, 0.05]; /* Retreats waits longest */
+        var durations = [1.4, 1.3, 1.2, 1.1]; /* longer travel = longer duration */
         items.forEach(function(item, i){
-          /* i=0 is Retreats (top), i=3 is FAQs (bottom).
-             FAQs needs least travel, Retreats needs most. */
-          var offset = -(60 + i * 30); /* FAQs:-60, Shop:-90, Story:-120, Retreats:-150 */
           tl.fromTo(item,
-            { y:offset },
-            { y:0, duration:1.6, ease:'expo.out' },
-            0
+            { y:offsets[i] },
+            { y:0, duration:durations[i], ease:'expo.out' },
+            delays[i]
           );
         });
       }
