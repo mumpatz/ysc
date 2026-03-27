@@ -205,6 +205,9 @@
     .navbar.is-solid .navbar__burger span{
       background:var(--earth-clay);
     }
+    .navbar__burger.is-open span{
+      background:var(--earth-clay);
+    }
 
     /* Burger (mobile only) */
     .navbar__burger{
@@ -213,6 +216,11 @@
       gap:8px;
       cursor:pointer;
       padding:4px;
+      position:relative;
+      width:32px;
+      height:32px;
+      justify-content:center;
+      align-items:center;
     }
     .navbar__burger span{
       display:block;
@@ -220,7 +228,69 @@
       height:2px;
       background:var(--soft-alabaster);
       border-radius:1px;
-      transition:background .4s ease;
+      transition:background .4s ease, transform .35s cubic-bezier(.4,0,.2,1), opacity .25s ease;
+    }
+    /* Burger → X transform */
+    .navbar__burger.is-open span:nth-child(1){
+      transform:translateY(10px) rotate(45deg);
+    }
+    .navbar__burger.is-open span:nth-child(2){
+      opacity:0;
+    }
+    .navbar__burger.is-open span:nth-child(3){
+      transform:translateY(-10px) rotate(-45deg);
+    }
+
+    /* ========= MOBILE MENU OVERLAY ========= */
+    .mobile-menu{
+      display:none;
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:99;
+      padding-top:74px; /* below navbar */
+      pointer-events:none;
+    }
+    .mobile-menu.is-visible{
+      pointer-events:auto;
+    }
+    .mobile-menu__panel{
+      background:var(--soft-alabaster);
+      margin:0 12px;
+      border-radius:0 0 8px 8px;
+      padding:0 12px 40px;
+      transform:translateY(-110%);
+      transition:transform .45s cubic-bezier(.4,0,.2,1);
+    }
+    .mobile-menu.is-visible .mobile-menu__panel{
+      transform:translateY(0);
+    }
+    .mobile-menu__item{
+      display:block;
+      padding:28px 0;
+      font-family:var(--ff-sans);
+      font-weight:600;
+      font-size:16px;
+      line-height:1;
+      text-transform:uppercase;
+      letter-spacing:0.5px;
+      color:var(--earth-clay);
+      text-decoration:none;
+      border-bottom:1px solid var(--earth-clay);
+    }
+    .mobile-menu__item:last-child{
+      border-bottom:none;
+    }
+    /* Backdrop */
+    .mobile-menu__backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.3);
+      opacity:0;
+      transition:opacity .45s ease;
+      z-index:-1;
+    }
+    .mobile-menu.is-visible .mobile-menu__backdrop{
+      opacity:1;
     }
 
     /* ========= CONTENT LAYER ========= */
@@ -660,6 +730,9 @@
       .navbar__burger{
         display:flex;
       }
+      .mobile-menu{
+        display:block;
+      }
       .navbar__right{
         gap:12px;
       }
@@ -890,6 +963,17 @@
     </div>
   </nav>
 
+  <!-- ===== MOBILE MENU ===== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu__panel">
+      <a href="#" class="mobile-menu__item">Retreats</a>
+      <a href="#" class="mobile-menu__item">Our Story</a>
+      <a href="#" class="mobile-menu__item">Shop</a>
+      <a href="#" class="mobile-menu__item">FAQs</a>
+    </div>
+    <div class="mobile-menu__backdrop" id="mobileMenuBackdrop"></div>
+  </div>
+
   <!-- ===== CONTENT LAYER ===== -->
   <div class="content">
     <div class="hero-spacer"></div>
@@ -1096,6 +1180,41 @@
       a.style.minWidth = a.scrollWidth + 'px';
       a.style.letterSpacing = '';
     });
+
+    /* Mobile menu toggle */
+    (function(){
+      var burger = document.querySelector('.navbar__burger');
+      var menu = document.getElementById('mobileMenu');
+      var backdrop = document.getElementById('mobileMenuBackdrop');
+      var nav = document.querySelector('.navbar');
+      var isOpen = false;
+
+      function openMenu(){
+        isOpen = true;
+        burger.classList.add('is-open');
+        menu.classList.add('is-visible');
+        document.body.style.overflow = 'hidden';
+        /* Force navbar to solid state when menu is open */
+        nav.classList.add('is-solid');
+        nav.classList.remove('is-hidden');
+      }
+      function closeMenu(){
+        isOpen = false;
+        burger.classList.remove('is-open');
+        menu.classList.remove('is-visible');
+        document.body.style.overflow = '';
+      }
+
+      burger.addEventListener('click', function(){
+        if(isOpen) closeMenu();
+        else openMenu();
+      });
+      backdrop.addEventListener('click', closeMenu);
+      /* Close on menu item click */
+      menu.querySelectorAll('.mobile-menu__item').forEach(function(item){
+        item.addEventListener('click', closeMenu);
+      });
+    })();
 
     /* Toggle background video on logo click */
     (function(){
