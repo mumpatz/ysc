@@ -1260,25 +1260,22 @@
         /* Build open timeline */
         tl = gsap.timeline();
 
-        /* 1. Panel height: opens fast, done before items settle.
-              Panel is just the container, items are the focus. */
+        /* 1. Panel height: opens quickly, acts as container. */
         tl.fromTo(panel,
           { height:NAVBAR_H },
-          { height:fullH, duration:0.7, ease:'power3.out' },
+          { height:fullH, duration:0.6, ease:'power2.out' },
           0
         );
 
-        /* 2. Items: pure motion, no opacity.
+        /* 2. Items: motion (y) + opacity, clear stagger.
               DOM order: i=0 Retreats, i=1 Our Story, i=2 Shop, i=3 FAQs.
-              FAQs appears first, Retreats is the last to settle.
-              Delays increase dramatically toward Retreats. */
-        var offsets   = [-280, -200, -110, -50];  /* Retreats, Story, Shop, FAQs */
-        var delays    = [0.65, 0.35, 0.15, 0.0];  /* Retreats starts very late */
-        var durations = [1.0,  0.9,  0.8,  0.7];  /* all use power3.out */
+              FAQs (bottom) appears first. Retreats (top) appears last.
+              Logarithmic delays: gaps grow toward Retreats. */
+        var delays = [0.7, 0.4, 0.18, 0.0]; /* Retreats, Story, Shop, FAQs */
         items.forEach(function(item, i){
           tl.fromTo(item,
-            { y:offsets[i] },
-            { y:0, duration:durations[i], ease:'power3.out' },
+            { y:-25, opacity:0 },
+            { y:0, opacity:1, duration:0.6, ease:'power3.out' },
             delays[i]
           );
         });
@@ -1301,12 +1298,15 @@
           }
         });
 
-        /* Items compress upward + panel collapses simultaneously */
-        items.forEach(function(item, i){
-          var offset = -(40 + i * 20);
-          tl.to(item, { y:offset, duration:0.35 }, 0);
-        });
-        tl.to(panel, { height:NAVBAR_H, duration:0.4 }, 0.05);
+        /* Items fade up, then panel collapses */
+        tl.to(items,
+          { y:-15, opacity:0, duration:0.25, stagger:0.03 },
+          0
+        );
+        tl.to(panel,
+          { height:NAVBAR_H, duration:0.35 },
+          0.15
+        );
       }
 
       burger.addEventListener('click', function(){
