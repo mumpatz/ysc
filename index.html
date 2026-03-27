@@ -734,11 +734,15 @@
       }
       /* Menu items inside panel */
       .navbar__menu-panel-inner{
-        padding:94px 12px 32px; /* 62px navbar + 32px top gap */
+        display:flex;
+        flex-direction:column;
+        gap:0;
+        padding:0 12px;
+        /* top padding set dynamically via JS (navbar height + 64px) */
       }
       .navbar__menu-item{
         display:block;
-        padding:32px 0;
+        padding:31.5px 0; /* 31.5 + 31.5 = 63px + 1px border = 64px between texts */
         font-family:var(--ff-sans);
         font-weight:600;
         font-size:16px;
@@ -749,9 +753,12 @@
         text-decoration:none;
         border-bottom:1px solid var(--earth-clay);
       }
+      .navbar__menu-item:first-child{
+        padding-top:64px; /* exact 64px from navbar bottom */
+      }
       .navbar__menu-item:last-child{
         border-bottom:none;
-        padding-bottom:32px;
+        padding-bottom:64px; /* exact 64px to panel bottom line */
       }
 
       /* Backdrop */
@@ -1222,28 +1229,35 @@
       a.style.letterSpacing = '';
     });
 
-    /* Mobile menu toggle with GSAP
-       Principle: bottom edge (with line) leads downward,
-       items trail behind from above — like falling leaves.
-       FAQs settles first, Retreats last. */
+    /* Mobile menu — "Falling leaves" animation
+       Uses GSAP stagger system for regular, elegant cascade.
+       Bottom edge leads, items trail from above.
+       FAQs first, Retreats last. */
     (function(){
       var burger = document.querySelector('.navbar__burger');
       var panel = document.getElementById('mobileMenuPanel');
       var panelInner = panel.querySelector('.navbar__menu-panel-inner');
       var backdrop = document.getElementById('mobileMenuBackdrop');
       var nav = document.querySelector('.navbar');
+      var navInner = nav.querySelector('.navbar__inner');
       var isOpen = false;
       var tl = null;
 
       var items = Array.from(panel.querySelectorAll('.navbar__menu-item'));
-      var NAVBAR_H = 62;
+
+      /* Dynamically set panel-inner top padding = navbar height */
+      function syncPadding(){
+        var h = navInner.offsetHeight;
+        panelInner.style.paddingTop = h + 'px';
+      }
 
       function openMenu(){
         if(isOpen) return;
         isOpen = true;
+        syncPadding();
+
         burger.classList.add('is-open');
         nav.classList.add('menu-open');
-        backdrop.classList.add('is-visible');
         nav.classList.remove('is-hidden');
 
         if(tl) tl.kill();
@@ -1251,37 +1265,38 @@
         gsap.set(panel, { clearProps:'height' });
         gsap.set(panel, { height:'auto' });
         var fullH = panel.offsetHeight;
+        var navH = navInner.offsetHeight;
 
         tl = gsap.timeline();
 
-        /* Bottom edge leads: panel reaches full height fast */
+        /* Panel bottom edge leads the motion */
         tl.fromTo(panel,
-          { height:NAVBAR_H },
-          { height:fullH, duration:0.5, ease:'power2.out' },
+          { height:navH },
+          { height:fullH, duration:0.55, ease:'power3.out' },
           0
         );
 
-        /* All items come from above (negative Y), same principle.
-           Items[0]=Retreats, [1]=Story, [2]=Shop, [3]=FAQs.
-           Large Y offsets — panel overflow:hidden clips from top.
-           FAQs settles first (delay 0.05), Retreats last (delay 0.55). */
-        var yStart = -180;
-        var delays = [0.55, 0.35, 0.18, 0.05];
-        items.forEach(function(item, i){
-          tl.fromTo(item,
-            { y:yStart },
-            { y:0, duration:1.0, ease:'power3.out' },
-            delays[i]
-          );
-        });
+        /* Items cascade from above using GSAP stagger.
+           from:"end" = start with last item (FAQs), end with first (Retreats).
+           stagger ease "power2.in" = logarithmic: small gaps first, big gap before Retreats. */
+        tl.from(items, {
+          y:-80,
+          duration:0.7,
+          ease:'power2.out',
+          stagger:{
+            each:0.12,
+            from:'end',
+            ease:'power2.in'
+          }
+        }, 0.08);
       }
 
       function closeMenu(){
         if(!isOpen) return;
         if(tl) tl.kill();
+        var navH = navInner.offsetHeight;
 
         tl = gsap.timeline({
-          defaults:{ ease:'power2.in' },
           onComplete:function(){
             isOpen = false;
             burger.classList.remove('is-open');
@@ -1292,13 +1307,17 @@
           }
         });
 
-        tl.to(items, { y:-120, duration:0.3, stagger:0.04 }, 0);
-        tl.to(panel, { height:NAVBAR_H, duration:0.35 }, 0.08);
+        tl.to(items, {
+          y:-60,
+          duration:0.25,
+          ease:'power2.in',
+          stagger:{ each:0.03, from:'end' }
+        }, 0);
+        tl.to(panel, { height:navH, duration:0.3, ease:'power2.in' }, 0.06);
       }
 
       burger.addEventListener('click', function(){
-        if(isOpen) closeMenu();
-        else openMenu();
+        if(isOpen) closeMenu(); else openMenu();
       });
       backdrop.addEventListener('click', function(){
         if(isOpen) closeMenu();
@@ -1306,7 +1325,7 @@
       window.addEventListener('scroll', function(){
         if(isOpen) closeMenu();
       }, {passive:true});
-      panel.querySelectorAll('.navbar__menu-item').forEach(function(item){
+      items.forEach(function(item){
         item.addEventListener('click', function(){ if(isOpen) closeMenu(); });
       });
     })();
