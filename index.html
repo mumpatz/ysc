@@ -1223,9 +1223,9 @@
     });
 
     /* Mobile menu toggle with GSAP
-       Approach: panel height animates from navbar-height to full.
-       Items stagger in from bottom-to-top (FAQs first, Retreats last),
-       each sliding down physically into view. */
+       Principle: bottom edge (with line) leads downward,
+       items trail behind from above — like falling leaves.
+       FAQs settles first, Retreats last. */
     (function(){
       var burger = document.querySelector('.navbar__burger');
       var panel = document.getElementById('mobileMenuPanel');
@@ -1233,7 +1233,7 @@
       var backdrop = document.getElementById('mobileMenuBackdrop');
       var nav = document.querySelector('.navbar');
       var isOpen = false;
-      var tl = null; /* timeline reference */
+      var tl = null;
 
       var items = Array.from(panel.querySelectorAll('.navbar__menu-item'));
       var NAVBAR_H = 62;
@@ -1254,21 +1254,23 @@
 
         tl = gsap.timeline();
 
-        /* Panel opens */
+        /* Bottom edge leads: panel reaches full height fast */
         tl.fromTo(panel,
           { height:NAVBAR_H },
-          { height:fullH, duration:0.7, ease:'power2.out' },
+          { height:fullH, duration:0.5, ease:'power2.out' },
           0
         );
 
-        /* Items[0]=Retreats, [1]=Story, [2]=Shop, [3]=FAQs.
-           FAQs first, Retreats last. Moderate Y, clear stagger. */
-        var yOff   = [-40, -34, -26, -18];
-        var delays = [0.65, 0.38, 0.18, 0.0];
+        /* All items come from above (negative Y), same principle.
+           Items[0]=Retreats, [1]=Story, [2]=Shop, [3]=FAQs.
+           Large Y offsets — panel overflow:hidden clips from top.
+           FAQs settles first (delay 0.05), Retreats last (delay 0.55). */
+        var yStart = -180;
+        var delays = [0.55, 0.35, 0.18, 0.05];
         items.forEach(function(item, i){
           tl.fromTo(item,
-            { y:yOff[i] },
-            { y:0, duration:0.9, ease:'power4.out' },
+            { y:yStart },
+            { y:0, duration:1.0, ease:'power3.out' },
             delays[i]
           );
         });
@@ -1290,8 +1292,8 @@
           }
         });
 
-        tl.to(items, { y:-20, duration:0.25, stagger:0.03 }, 0);
-        tl.to(panel, { height:NAVBAR_H, duration:0.3 }, 0.1);
+        tl.to(items, { y:-120, duration:0.3, stagger:0.04 }, 0);
+        tl.to(panel, { height:NAVBAR_H, duration:0.35 }, 0.08);
       }
 
       burger.addEventListener('click', function(){
