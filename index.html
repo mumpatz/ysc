@@ -736,11 +736,11 @@
          Logo bottom = 12px padding + 38px logo = 50px from top.
          First text at 50 + 64 = 114px from panel top. */
       .navbar__menu-panel-inner{
-        padding:114px 12px 0;
+        padding:114px 12px 64px;
       }
       .navbar__menu-item{
         display:block;
-        padding:64px 0 0;
+        padding:0;
         font-family:var(--ff-sans);
         font-weight:600;
         font-size:16px;
@@ -753,10 +753,7 @@
       .navbar__menu-divider{
         height:1px;
         background:var(--earth-clay);
-        margin-top:64px;
-      }
-      .navbar__menu-item:last-child + .navbar__menu-divider{
-        display:none; /* no divider after FAQs */
+        margin:64px 0;
       }
 
       /* Backdrop */
@@ -1258,47 +1255,35 @@
 
         if(tl) tl.kill();
 
-        /* Measure full panel height */
-        gsap.set(panel, { height:'auto' });
+        /* Reset everything cleanly, then measure */
         gsap.set(allElements, { clearProps:'all' });
+        gsap.set(panel, { clearProps:'height' });
+        gsap.set(panel, { height:'auto' });
         var fullH = panel.offsetHeight;
 
         tl = gsap.timeline();
 
-        /* 1. Panel height: opens to make room for falling items */
+        /* 1. Panel height */
         tl.fromTo(panel,
           { height:NAVBAR_H },
-          { height:fullH, duration:0.8, ease:'power2.out' },
+          { height:fullH, duration:0.7, ease:'power2.out' },
           0
         );
 
-        /* 2. "Falling leaves" — pure motion, zero opacity tricks.
-              All elements start stacked up high behind the navbar.
-              They fall into position with increasing delay.
-              DOM: items[0]=Retreats, [1]=Story, [2]=Shop, [3]=FAQs
-              dividers[0]=after Retreats, [1]=after Story, [2]=after Shop */
-
-        /* Items: Retreats falls last and furthest */
-        var itemY      = [-350, -260, -150, -60];
-        var itemDelay  = [0.80, 0.50, 0.22, 0.0];
-        var itemDur    = [1.4,  1.2,  1.0,  0.8];
-        items.forEach(function(item, i){
-          tl.fromTo(item,
-            { y:itemY[i] },
-            { y:0, duration:itemDur[i], ease:'power4.out' },
-            itemDelay[i]
-          );
-        });
-
-        /* Dividers: fall between their adjacent items */
-        var divY     = [-220, -120, -50];
-        var divDelay = [0.65, 0.36, 0.10];
-        var divDur   = [1.3,  1.1,  0.9];
-        dividers.forEach(function(div, i){
-          tl.fromTo(div,
-            { y:divY[i] },
-            { y:0, duration:divDur[i], ease:'power4.out' },
-            divDelay[i]
+        /* 2. All elements in DOM order fall from above.
+              allElements: [Retreats, div, Story, div, Shop, div, FAQs]
+              Index 0=Retreats(top), 6=FAQs(bottom).
+              FAQs falls first (small offset, no delay).
+              Retreats falls last (big offset, long delay). */
+        var count = allElements.length;
+        allElements.forEach(function(el, i){
+          var reverse = count - 1 - i;
+          var delay = reverse * 0.12;
+          var yStart = -(25 + reverse * 25);
+          tl.fromTo(el,
+            { y:yStart },
+            { y:0, duration:0.9, ease:'power4.out' },
+            delay
           );
         });
       }
