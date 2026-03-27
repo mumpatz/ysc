@@ -712,26 +712,26 @@
         display:flex;
       }
 
-      /* Mobile menu panel */
+      /* Mobile menu panel - completely hidden until open */
       .navbar__menu-panel{
-        display:block;
+        display:none;
         position:absolute;
         top:0;left:12px;right:12px;
-        background:transparent;
+        background:var(--soft-alabaster);
         border-radius:0 0 8px 8px;
-        z-index:1; /* behind __inner */
+        z-index:1;
         overflow:hidden;
-        max-height:0;
-        transition:max-height .45s cubic-bezier(.4,0,.2,1), background .1s ease;
-        pointer-events:none;
       }
       .navbar.menu-open .navbar__menu-panel{
-        background:var(--soft-alabaster);
-        max-height:500px;
-        pointer-events:auto;
+        display:block;
+        animation:menuSlideDown .4s cubic-bezier(.4,0,.2,1) forwards;
       }
-      /* The line at the bottom of the panel - only when open */
-      .navbar__menu-panel::after{
+      @keyframes menuSlideDown{
+        from{ clip-path:inset(0 0 100% 0); }
+        to{ clip-path:inset(0 0 0 0); }
+      }
+      /* The line at the bottom of the panel */
+      .navbar.menu-open .navbar__menu-panel::after{
         content:'';
         position:absolute;
         bottom:0;
@@ -739,10 +739,6 @@
         right:12px;
         height:1px;
         background:var(--earth-clay);
-        opacity:0;
-      }
-      .navbar.menu-open .navbar__menu-panel::after{
-        opacity:1;
       }
       /* Menu items inside panel, pushed below the navbar row */
       .navbar__menu-panel-inner{
