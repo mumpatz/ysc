@@ -1265,40 +1265,40 @@
 
         tl = gsap.timeline();
 
-        /* 1. Panel height: opens fast, just a container */
+        /* 1. Panel height: opens to make room for falling items */
         tl.fromTo(panel,
           { height:NAVBAR_H },
-          { height:fullH, duration:0.7, ease:'power2.out' },
+          { height:fullH, duration:0.8, ease:'power2.out' },
           0
         );
 
-        /* 2. Items: pure motion, no opacity. Large Y offsets.
-              DOM: Retreats(0), Story(1), Shop(2), FAQs(3)
-              FAQs appears first, Retreats last.
-              Dividers sit between items and follow their own timing. */
+        /* 2. "Falling leaves" — pure motion, zero opacity tricks.
+              All elements start stacked up high behind the navbar.
+              They fall into position with increasing delay.
+              DOM: items[0]=Retreats, [1]=Story, [2]=Shop, [3]=FAQs
+              dividers[0]=after Retreats, [1]=after Story, [2]=after Shop */
 
-        /* Item offsets + delays (logarithmic toward Retreats) */
-        var itemOffsets = [-220, -160, -90, -35];
-        var itemDelays  = [0.65, 0.38, 0.16, 0.0];
-        var itemDurs    = [1.1,  1.0,  0.85, 0.7];
+        /* Items: Retreats falls last and furthest */
+        var itemY      = [-350, -260, -150, -60];
+        var itemDelay  = [0.80, 0.50, 0.22, 0.0];
+        var itemDur    = [1.4,  1.2,  1.0,  0.8];
         items.forEach(function(item, i){
           tl.fromTo(item,
-            { y:itemOffsets[i] },
-            { y:0, duration:itemDurs[i], ease:'power4.out' },
-            itemDelays[i]
+            { y:itemY[i] },
+            { y:0, duration:itemDur[i], ease:'power4.out' },
+            itemDelay[i]
           );
         });
 
-        /* Dividers: sit between items, follow timing of the item below.
-           div[0] between Retreats & Story, div[1] Story & Shop, div[2] Shop & FAQs */
-        var divOffsets = [-140, -80, -40];
-        var divDelays  = [0.50, 0.26, 0.08];
-        var divDurs    = [1.0,  0.9,  0.75];
+        /* Dividers: fall between their adjacent items */
+        var divY     = [-220, -120, -50];
+        var divDelay = [0.65, 0.36, 0.10];
+        var divDur   = [1.3,  1.1,  0.9];
         dividers.forEach(function(div, i){
           tl.fromTo(div,
-            { y:divOffsets[i] },
-            { y:0, duration:divDurs[i], ease:'power4.out' },
-            divDelays[i]
+            { y:divY[i] },
+            { y:0, duration:divDur[i], ease:'power4.out' },
+            divDelay[i]
           );
         });
       }
@@ -1320,9 +1320,9 @@
           }
         });
 
-        /* Everything slides up together */
+        /* Everything flies back up */
         tl.to(allElements,
-          { y:-30, duration:0.3, stagger:0.02 },
+          { y:-60, duration:0.3, stagger:0.02 },
           0
         );
         tl.to(panel,
