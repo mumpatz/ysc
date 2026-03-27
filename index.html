@@ -737,13 +737,16 @@
         height:1px;
         background:var(--earth-clay);
       }
-      /* Menu items inside panel, pushed below the navbar row */
+      /* Menu items inside panel, pushed below the navbar row.
+         Logo bottom = 12px padding + 38px logo = 50px from top.
+         First text at 50 + 64 = 114px from panel top. */
       .navbar__menu-panel-inner{
-        padding:62px 12px 0; /* top padding pushes below navbar__inner */
+        padding:114px 12px 0;
       }
       .navbar__menu-item{
         display:block;
-        padding:32px 0;
+        padding:0 0 64px;
+        margin-bottom:64px;
         font-family:var(--ff-sans);
         font-weight:600;
         font-size:16px;
@@ -756,7 +759,7 @@
       }
       .navbar__menu-item:last-child{
         border-bottom:none;
-        padding-bottom:40px;
+        margin-bottom:0;
       }
 
       /* Backdrop */
