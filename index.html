@@ -740,8 +740,7 @@
       }
       .navbar__menu-item{
         display:block;
-        padding:0 0 64px;
-        margin-bottom:64px;
+        padding:64px 0 0;
         font-family:var(--ff-sans);
         font-weight:600;
         font-size:16px;
@@ -750,11 +749,14 @@
         letter-spacing:0.5px;
         color:var(--earth-clay);
         text-decoration:none;
-        border-bottom:1px solid var(--earth-clay);
       }
-      .navbar__menu-item:last-child{
-        border-bottom:none;
-        margin-bottom:0;
+      .navbar__menu-divider{
+        height:1px;
+        background:var(--earth-clay);
+        margin-top:64px;
+      }
+      .navbar__menu-item:last-child + .navbar__menu-divider{
+        display:none; /* no divider after FAQs */
       }
 
       /* Backdrop */
@@ -1007,8 +1009,11 @@
     <div class="navbar__menu-panel" id="mobileMenuPanel">
       <div class="navbar__menu-panel-inner">
         <a href="#" class="navbar__menu-item">Retreats</a>
+        <div class="navbar__menu-divider"></div>
         <a href="#" class="navbar__menu-item">Our Story</a>
+        <div class="navbar__menu-divider"></div>
         <a href="#" class="navbar__menu-item">Shop</a>
+        <div class="navbar__menu-divider"></div>
         <a href="#" class="navbar__menu-item">FAQs</a>
       </div>
     </div>
@@ -1239,8 +1244,9 @@
       var tl = null; /* timeline reference */
 
       var items = Array.from(panel.querySelectorAll('.navbar__menu-item'));
-      var reversedItems = items.slice().reverse();
-      var NAVBAR_H = 62; /* collapsed panel height = navbar__inner height */
+      var dividers = Array.from(panel.querySelectorAll('.navbar__menu-divider'));
+      var allElements = Array.from(panel.querySelectorAll('.navbar__menu-item, .navbar__menu-divider'));
+      var NAVBAR_H = 62;
 
       function openMenu(){
         if(isOpen) return;
@@ -1250,33 +1256,49 @@
         backdrop.classList.add('is-visible');
         nav.classList.remove('is-hidden');
 
-        /* Kill any running timeline */
         if(tl) tl.kill();
 
         /* Measure full panel height */
         gsap.set(panel, { height:'auto' });
+        gsap.set(allElements, { clearProps:'all' });
         var fullH = panel.offsetHeight;
 
-        /* Build open timeline */
         tl = gsap.timeline();
 
-        /* 1. Panel height: opens quickly, acts as container. */
+        /* 1. Panel height: opens fast, just a container */
         tl.fromTo(panel,
           { height:NAVBAR_H },
-          { height:fullH, duration:0.6, ease:'power2.out' },
+          { height:fullH, duration:0.7, ease:'power2.out' },
           0
         );
 
-        /* 2. Items: motion (y) + opacity, clear stagger.
-              DOM order: i=0 Retreats, i=1 Our Story, i=2 Shop, i=3 FAQs.
-              FAQs (bottom) appears first. Retreats (top) appears last.
-              Logarithmic delays: gaps grow toward Retreats. */
-        var delays = [0.7, 0.4, 0.18, 0.0]; /* Retreats, Story, Shop, FAQs */
+        /* 2. Items: pure motion, no opacity. Large Y offsets.
+              DOM: Retreats(0), Story(1), Shop(2), FAQs(3)
+              FAQs appears first, Retreats last.
+              Dividers sit between items and follow their own timing. */
+
+        /* Item offsets + delays (logarithmic toward Retreats) */
+        var itemOffsets = [-220, -160, -90, -35];
+        var itemDelays  = [0.65, 0.38, 0.16, 0.0];
+        var itemDurs    = [1.1,  1.0,  0.85, 0.7];
         items.forEach(function(item, i){
           tl.fromTo(item,
-            { y:-25, opacity:0 },
-            { y:0, opacity:1, duration:0.6, ease:'power3.out' },
-            delays[i]
+            { y:itemOffsets[i] },
+            { y:0, duration:itemDurs[i], ease:'power4.out' },
+            itemDelays[i]
+          );
+        });
+
+        /* Dividers: sit between items, follow timing of the item below.
+           div[0] between Retreats & Story, div[1] Story & Shop, div[2] Shop & FAQs */
+        var divOffsets = [-140, -80, -40];
+        var divDelays  = [0.50, 0.26, 0.08];
+        var divDurs    = [1.0,  0.9,  0.75];
+        dividers.forEach(function(div, i){
+          tl.fromTo(div,
+            { y:divOffsets[i] },
+            { y:0, duration:divDurs[i], ease:'power4.out' },
+            divDelays[i]
           );
         });
       }
@@ -1293,19 +1315,19 @@
             burger.classList.remove('is-open');
             nav.classList.remove('menu-open');
             backdrop.classList.remove('is-visible');
-            gsap.set(items, { clearProps:'all' });
+            gsap.set(allElements, { clearProps:'all' });
             gsap.set(panel, { clearProps:'height' });
           }
         });
 
-        /* Items fade up, then panel collapses */
-        tl.to(items,
-          { y:-15, opacity:0, duration:0.25, stagger:0.03 },
+        /* Everything slides up together */
+        tl.to(allElements,
+          { y:-30, duration:0.3, stagger:0.02 },
           0
         );
         tl.to(panel,
           { height:NAVBAR_H, duration:0.35 },
-          0.15
+          0.1
         );
       }
 
