@@ -1260,24 +1260,27 @@
         /* Build open timeline */
         tl = gsap.timeline();
 
-        /* 1. Panel height: navbar height → full.
-              Extreme ease-out: fast start, very slow finish. */
+        /* 1. Panel height: navbar height → full. */
         tl.fromTo(panel,
           { height:NAVBAR_H },
-          { height:fullH, duration:1.4, ease:'expo.out' },
+          { height:fullH, duration:1.6, ease:'expo.out' },
           0
         );
 
-        /* 2. Items stagger in reverse (FAQs → Shop → Our Story → Retreats).
-              Each slides down from -30px with opacity fade.
-              Logarithmic stagger: early items quick, Retreats much later. */
-        tl.fromTo(reversedItems,
-          { y:-30, opacity:0 },
-          { y:0, opacity:1, duration:1.0, ease:'expo.out',
-            stagger:{ each:0.2, ease:'power2.in' }
-          },
-          0.1
-        );
+        /* 2. Items: pure motion, no opacity. All start compressed
+              near the top. Larger initial offset for later items
+              (Retreats starts furthest away). Panel overflow:hidden
+              masks them until the panel grows enough. */
+        items.forEach(function(item, i){
+          /* i=0 is Retreats (top), i=3 is FAQs (bottom).
+             FAQs needs least travel, Retreats needs most. */
+          var offset = -(60 + i * 30); /* FAQs:-60, Shop:-90, Story:-120, Retreats:-150 */
+          tl.fromTo(item,
+            { y:offset },
+            { y:0, duration:1.6, ease:'expo.out' },
+            0
+          );
+        });
       }
 
       function closeMenu(){
@@ -1297,17 +1300,12 @@
           }
         });
 
-        /* 1. Items slide up + fade (Retreats first) */
-        tl.to(items,
-          { y:-20, opacity:0, duration:0.3, stagger:0.04 },
-          0
-        );
-
-        /* 2. Panel collapses */
-        tl.to(panel,
-          { height:NAVBAR_H, duration:0.4 },
-          0.1
-        );
+        /* Items compress upward + panel collapses simultaneously */
+        items.forEach(function(item, i){
+          var offset = -(40 + i * 20);
+          tl.to(item, { y:offset, duration:0.35 }, 0);
+        });
+        tl.to(panel, { height:NAVBAR_H, duration:0.4 }, 0.05);
       }
 
       burger.addEventListener('click', function(){
