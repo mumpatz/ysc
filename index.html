@@ -1225,72 +1225,86 @@
       a.style.letterSpacing = '';
     });
 
-    /* Mobile menu toggle with GSAP */
+    /* Mobile menu toggle with GSAP
+       Approach: panel height animates from navbar-height to full.
+       Items stagger in from bottom-to-top (FAQs first, Retreats last),
+       each sliding down physically into view. */
     (function(){
       var burger = document.querySelector('.navbar__burger');
       var panel = document.getElementById('mobileMenuPanel');
+      var panelInner = panel.querySelector('.navbar__menu-panel-inner');
       var backdrop = document.getElementById('mobileMenuBackdrop');
       var nav = document.querySelector('.navbar');
       var isOpen = false;
-      var isAnimating = false;
+      var tl = null; /* timeline reference */
 
-      /* Collect elements: items + their divider lines (border-bottom).
-         We animate items in reverse order (FAQs first, Retreats last). */
       var items = Array.from(panel.querySelectorAll('.navbar__menu-item'));
-      var panelLine = panel; /* ::after on panel = bottom line */
+      var reversedItems = items.slice().reverse();
+      var NAVBAR_H = 62; /* collapsed panel height = navbar__inner height */
 
       function openMenu(){
-        if(isAnimating) return;
-        isAnimating = true;
+        if(isOpen) return;
         isOpen = true;
         burger.classList.add('is-open');
         nav.classList.add('menu-open');
         backdrop.classList.add('is-visible');
         nav.classList.remove('is-hidden');
 
-        /* Panel clip-path reveal */
-        gsap.fromTo(panel,
-          { clipPath:'inset(0 0 100% 0)' },
-          { clipPath:'inset(0 0 0% 0)', duration:0.9, ease:'power3.out' }
+        /* Kill any running timeline */
+        if(tl) tl.kill();
+
+        /* Measure full panel height */
+        gsap.set(panel, { height:'auto' });
+        var fullH = panel.offsetHeight;
+
+        /* Build open timeline */
+        tl = gsap.timeline({
+          defaults:{ ease:'power4.out' }
+        });
+
+        /* 1. Panel height: navbar height → full */
+        tl.fromTo(panel,
+          { height:NAVBAR_H },
+          { height:fullH, duration:1.0 },
+          0
         );
 
-        /* Items: stagger from last to first (reverse order).
-           Each item fades in + slides down from above. */
-        var reversedItems = items.slice().reverse();
-        gsap.fromTo(reversedItems,
-          { y:-15, opacity:0 },
-          { y:0, opacity:1, duration:0.55, ease:'power3.out',
-            stagger:0.1, delay:0.15,
-            onComplete:function(){ isAnimating = false; }
-          }
+        /* 2. Items stagger in reverse (FAQs → Shop → Our Story → Retreats).
+              Each slides down from -30px with opacity fade. */
+        tl.fromTo(reversedItems,
+          { y:-30, opacity:0 },
+          { y:0, opacity:1, duration:0.7, stagger:0.15 },
+          0.1 /* slight delay after panel starts */
         );
       }
 
       function closeMenu(){
-        if(isAnimating) return;
-        isAnimating = true;
+        if(!isOpen) return;
 
-        /* Items fade out + slide up, first to last (Retreats first) */
-        gsap.to(items,
-          { y:-10, opacity:0, duration:0.3, ease:'power2.in',
-            stagger:0.05 }
+        if(tl) tl.kill();
+
+        tl = gsap.timeline({
+          defaults:{ ease:'power2.in' },
+          onComplete:function(){
+            isOpen = false;
+            burger.classList.remove('is-open');
+            nav.classList.remove('menu-open');
+            backdrop.classList.remove('is-visible');
+            gsap.set(items, { clearProps:'all' });
+            gsap.set(panel, { clearProps:'height' });
+          }
+        });
+
+        /* 1. Items slide up + fade (Retreats first) */
+        tl.to(items,
+          { y:-20, opacity:0, duration:0.3, stagger:0.04 },
+          0
         );
 
-        /* Panel clip-path close */
-        gsap.to(panel,
-          { clipPath:'inset(0 0 100% 0)', duration:0.5, ease:'power2.in',
-            delay:0.15,
-            onComplete:function(){
-              isOpen = false;
-              isAnimating = false;
-              burger.classList.remove('is-open');
-              nav.classList.remove('menu-open');
-              backdrop.classList.remove('is-visible');
-              /* Reset item transforms for next open */
-              gsap.set(items, { clearProps:'all' });
-              gsap.set(panel, { clearProps:'clipPath' });
-            }
-          }
+        /* 2. Panel collapses */
+        tl.to(panel,
+          { height:NAVBAR_H, duration:0.4 },
+          0.1
         );
       }
 
