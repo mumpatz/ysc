@@ -717,20 +717,20 @@
         display:block;
         position:absolute;
         top:0;left:12px;right:12px;
-        background:var(--soft-alabaster);
+        background:transparent;
         border-radius:0 0 8px 8px;
         z-index:1; /* behind __inner */
         overflow:hidden;
-        /* Collapsed: same height as navbar__inner so it hides behind it */
-        max-height:62px; /* matches navbar__inner height */
-        transition:max-height .45s cubic-bezier(.4,0,.2,1);
+        max-height:0;
+        transition:max-height .45s cubic-bezier(.4,0,.2,1), background .1s ease;
         pointer-events:none;
       }
       .navbar.menu-open .navbar__menu-panel{
-        max-height:500px; /* enough to show all items */
+        background:var(--soft-alabaster);
+        max-height:500px;
         pointer-events:auto;
       }
-      /* The line at the bottom of the panel */
+      /* The line at the bottom of the panel - only when open */
       .navbar__menu-panel::after{
         content:'';
         position:absolute;
@@ -739,11 +739,14 @@
         right:12px;
         height:1px;
         background:var(--earth-clay);
+        opacity:0;
+      }
+      .navbar.menu-open .navbar__menu-panel::after{
+        opacity:1;
       }
       /* Menu items inside panel, pushed below the navbar row */
       .navbar__menu-panel-inner{
-        padding:0 12px 32px;
-        margin-top:62px; /* push below navbar__inner */
+        padding:62px 12px 32px; /* top padding pushes below navbar__inner */
       }
       .navbar__menu-item{
         display:block;
