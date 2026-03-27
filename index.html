@@ -721,14 +721,9 @@
       }
       .navbar.menu-open .navbar__menu-panel{
         display:block;
-        animation:menuSlideDown .7s cubic-bezier(.16,1,.3,1) forwards;
-      }
-      @keyframes menuSlideDown{
-        from{ clip-path:inset(0 0 100% 0); }
-        to{ clip-path:inset(0 0 0 0); }
       }
       /* The line at the bottom of the panel */
-      .navbar.menu-open .navbar__menu-panel::after{
+      .navbar__menu-panel::after{
         content:'';
         position:absolute;
         bottom:0;
@@ -1146,6 +1141,7 @@
     <div style="height:60vh"></div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
   <script>
     /* Navbar scroll behaviour
        - At top: transparent, visible
@@ -1229,41 +1225,87 @@
       a.style.letterSpacing = '';
     });
 
-    /* Mobile menu toggle */
+    /* Mobile menu toggle with GSAP */
     (function(){
       var burger = document.querySelector('.navbar__burger');
       var panel = document.getElementById('mobileMenuPanel');
       var backdrop = document.getElementById('mobileMenuBackdrop');
       var nav = document.querySelector('.navbar');
       var isOpen = false;
+      var isAnimating = false;
+
+      /* Collect elements: items + their divider lines (border-bottom).
+         We animate items in reverse order (FAQs first, Retreats last). */
+      var items = Array.from(panel.querySelectorAll('.navbar__menu-item'));
+      var panelLine = panel; /* ::after on panel = bottom line */
 
       function openMenu(){
+        if(isAnimating) return;
+        isAnimating = true;
         isOpen = true;
         burger.classList.add('is-open');
         nav.classList.add('menu-open');
         backdrop.classList.add('is-visible');
-        /* Ensure navbar is visible */
         nav.classList.remove('is-hidden');
+
+        /* Panel clip-path reveal */
+        gsap.fromTo(panel,
+          { clipPath:'inset(0 0 100% 0)' },
+          { clipPath:'inset(0 0 0% 0)', duration:0.9, ease:'power3.out' }
+        );
+
+        /* Items: stagger from last to first (reverse order).
+           Each item fades in + slides down from above. */
+        var reversedItems = items.slice().reverse();
+        gsap.fromTo(reversedItems,
+          { y:-15, opacity:0 },
+          { y:0, opacity:1, duration:0.55, ease:'power3.out',
+            stagger:0.1, delay:0.15,
+            onComplete:function(){ isAnimating = false; }
+          }
+        );
       }
+
       function closeMenu(){
-        isOpen = false;
-        burger.classList.remove('is-open');
-        nav.classList.remove('menu-open');
-        backdrop.classList.remove('is-visible');
+        if(isAnimating) return;
+        isAnimating = true;
+
+        /* Items fade out + slide up, first to last (Retreats first) */
+        gsap.to(items,
+          { y:-10, opacity:0, duration:0.3, ease:'power2.in',
+            stagger:0.05 }
+        );
+
+        /* Panel clip-path close */
+        gsap.to(panel,
+          { clipPath:'inset(0 0 100% 0)', duration:0.5, ease:'power2.in',
+            delay:0.15,
+            onComplete:function(){
+              isOpen = false;
+              isAnimating = false;
+              burger.classList.remove('is-open');
+              nav.classList.remove('menu-open');
+              backdrop.classList.remove('is-visible');
+              /* Reset item transforms for next open */
+              gsap.set(items, { clearProps:'all' });
+              gsap.set(panel, { clearProps:'clipPath' });
+            }
+          }
+        );
       }
 
       burger.addEventListener('click', function(){
         if(isOpen) closeMenu();
         else openMenu();
       });
-      backdrop.addEventListener('click', closeMenu);
-      /* Close on scroll */
+      backdrop.addEventListener('click', function(){
+        if(isOpen) closeMenu();
+      });
       window.addEventListener('scroll', function(){
         if(isOpen) closeMenu();
       }, {passive:true});
-      /* Close on menu item click */
       panel.querySelectorAll('.navbar__menu-item').forEach(function(item){
-        item.addEventListener('click', closeMenu);
+        item.addEventListener('click', function(){ if(isOpen) closeMenu(); });
       });
     })();
 
