@@ -1291,16 +1291,15 @@
         );
 
         /* Items get a subtle Y push from above as they're revealed.
-           Panel overflow:hidden keeps them hidden until the edge passes.
-           from:"end" = FAQs area first, Retreats last.
-           Stagger ease creates logarithmic delay distribution. */
+           Panel reveals top→bottom, so stagger matches: Retreats first, FAQs last.
+           Each item's Y animation syncs with when the panel edge reaches it. */
         tl.from(children, {
           y:-40,
           duration:0.9,
           ease:'expo.out',
           stagger:{
             each:0.06,
-            from:'end',
+            from:'start',
             ease:'power2.in'
           }
         }, 0.02);
