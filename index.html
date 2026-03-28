@@ -717,7 +717,6 @@
         background:var(--soft-alabaster);
         border-radius:0 0 8px 8px;
         z-index:1;
-        overflow:hidden;
       }
       .navbar.menu-open .navbar__menu-panel{
         display:block;
@@ -734,15 +733,12 @@
       }
       /* Menu items inside panel */
       .navbar__menu-panel-inner{
-        display:flex;
-        flex-direction:column;
-        gap:0;
         padding:0 12px;
-        /* top padding set dynamically via JS (navbar height + 64px) */
+        /* top padding set dynamically via JS = navbar height */
       }
       .navbar__menu-item{
         display:block;
-        padding:31.5px 0; /* 31.5 + 31.5 = 63px + 1px border = 64px between texts */
+        padding:32px 0;
         font-family:var(--ff-sans);
         font-weight:600;
         font-size:16px;
@@ -754,11 +750,11 @@
         border-bottom:1px solid var(--earth-clay);
       }
       .navbar__menu-item:first-child{
-        padding-top:32px; /* optically matches 64px between items (split by border) */
+        padding-top:48px;
       }
       .navbar__menu-item:last-child{
         border-bottom:none;
-        padding-bottom:32px; /* optically matches 64px between items (split by border) */
+        padding-bottom:48px;
       }
 
       /* Backdrop */
@@ -1230,9 +1226,9 @@
     });
 
     /* Mobile menu — "Falling leaves" animation
-       Uses GSAP stagger system for regular, elegant cascade.
-       Bottom edge leads, items trail from above.
-       FAQs first, Retreats last. */
+       clipPath reveal (top→bottom) instead of height animation.
+       This ensures ALL items appear from above, never masked from below.
+       Items stagger with GSAP: FAQs first, Retreats last. */
     (function(){
       var burger = document.querySelector('.navbar__burger');
       var panel = document.getElementById('mobileMenuPanel');
@@ -1245,10 +1241,8 @@
 
       var items = Array.from(panel.querySelectorAll('.navbar__menu-item'));
 
-      /* Dynamically set panel-inner top padding = navbar height */
       function syncPadding(){
-        var h = navInner.offsetHeight;
-        panelInner.style.paddingTop = h + 'px';
+        panelInner.style.paddingTop = navInner.offsetHeight + 'px';
       }
 
       function openMenu(){
@@ -1262,39 +1256,41 @@
 
         if(tl) tl.kill();
         gsap.set(items, { clearProps:'all' });
-        gsap.set(panel, { clearProps:'height' });
-        gsap.set(panel, { height:'auto' });
-        var fullH = panel.offsetHeight;
-        var navH = navInner.offsetHeight;
+        gsap.set(panel, { clearProps:'clipPath,height' });
 
         tl = gsap.timeline();
 
-        /* Panel bottom edge leads the motion */
+        /* Panel reveals top→bottom via clipPath.
+           Starts clipped to navbar height, expands to show all content. */
+        var navH = navInner.offsetHeight;
+        var fullH = panel.scrollHeight;
         tl.fromTo(panel,
-          { height:navH },
-          { height:fullH, duration:0.55, ease:'power3.out' },
+          { clipPath:'inset(0 0 ' + (fullH - navH) + 'px 0)' },
+          { clipPath:'inset(0 0 0px 0)', duration:0.6, ease:'power2.out' },
           0
         );
 
-        /* Items cascade from above using GSAP stagger.
-           from:"end" = start with last item (FAQs), end with first (Retreats).
-           stagger ease "power2.in" = logarithmic: small gaps first, big gap before Retreats. */
+        /* Items slide down from above — uniform principle.
+           from:"end" starts with FAQs, ends with Retreats.
+           stagger ease: logarithmic spacing (small gaps first, Retreats waits longest). */
         tl.from(items, {
-          y:-80,
-          duration:0.7,
+          y:-50,
+          duration:0.65,
           ease:'power2.out',
           stagger:{
-            each:0.12,
+            each:0.1,
             from:'end',
             ease:'power2.in'
           }
-        }, 0.08);
+        }, 0.05);
       }
 
       function closeMenu(){
         if(!isOpen) return;
         if(tl) tl.kill();
+
         var navH = navInner.offsetHeight;
+        var fullH = panel.scrollHeight;
 
         tl = gsap.timeline({
           onComplete:function(){
@@ -1303,17 +1299,21 @@
             nav.classList.remove('menu-open');
             backdrop.classList.remove('is-visible');
             gsap.set(items, { clearProps:'all' });
-            gsap.set(panel, { clearProps:'height' });
+            gsap.set(panel, { clearProps:'clipPath,height' });
           }
         });
 
         tl.to(items, {
-          y:-60,
-          duration:0.25,
+          y:-40,
+          duration:0.2,
           ease:'power2.in',
-          stagger:{ each:0.03, from:'end' }
+          stagger:{ each:0.02, from:'end' }
         }, 0);
-        tl.to(panel, { height:navH, duration:0.3, ease:'power2.in' }, 0.06);
+        tl.to(panel, {
+          clipPath:'inset(0 0 ' + (fullH - navH) + 'px 0)',
+          duration:0.3,
+          ease:'power2.in'
+        }, 0.05);
       }
 
       burger.addEventListener('click', function(){
