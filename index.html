@@ -1228,9 +1228,9 @@
       var a = li.querySelector('a');
       if(!a) return;
       a.style.letterSpacing = '1.5px';
-      var w = li.scrollWidth;
+      var w = a.scrollWidth;
       a.style.letterSpacing = '';
-      li.style.width = w + 'px';
+      li.style.minWidth = w + 'px';
     });
 
     /* Mobile menu — "Falling leaves" animation
