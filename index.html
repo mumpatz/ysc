@@ -1334,12 +1334,20 @@
       burger.addEventListener('click', function(){
         if(isOpen) closeMenu(); else openMenu();
       });
+      /* Close on tap/click outside the menu panel (on backdrop or page content).
+         Use touchend to detect taps, not scroll. Swiping over the menu
+         lets content scroll without closing. */
       backdrop.addEventListener('click', function(){
         if(isOpen) closeMenu();
       });
-      window.addEventListener('scroll', function(){
-        if(isOpen) closeMenu();
-      }, {passive:true});
+      document.addEventListener('click', function(e){
+        if(!isOpen) return;
+        /* Close if click is outside panel and burger */
+        if(!panel.contains(e.target) && !burger.contains(e.target)){
+          closeMenu();
+        }
+      });
+      /* NO scroll listener — menu stays open while scrolling */
       items.forEach(function(item){
         item.addEventListener('click', function(){ if(isOpen) closeMenu(); });
       });
