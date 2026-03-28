@@ -1290,19 +1290,23 @@
           0
         );
 
-        /* Items get a subtle Y push from above as they're revealed.
-           Panel reveals top→bottom, so stagger matches: Retreats first, FAQs last.
-           Each item's Y animation syncs with when the panel edge reaches it. */
-        tl.from(children, {
-          y:-40,
-          duration:0.9,
-          ease:'expo.out',
-          stagger:{
-            each:0.06,
-            from:'start',
-            ease:'power2.in'
-          }
-        }, 0.02);
+        /* Items cascade top→bottom matching panel reveal.
+           Retreats starts first but settles LAST (longest duration + delay).
+           Custom ease via cubic-bezier for ultra-soft deceleration. */
+        var n = children.length;
+        children.forEach(function(child, i){
+          var t = i / (n - 1); /* 0=first child, 1=last child */
+          /* Delay: first child (Retreats area) starts at 0.5s, last (FAQs) at 0.02s */
+          var delay = 0.02 + (1 - t) * 0.55;
+          /* Duration: Retreats gets longest (1.4s), FAQs shortest (0.8s) */
+          var dur = 0.8 + (1 - t) * 0.6;
+
+          tl.from(child, {
+            y:-50,
+            duration:dur,
+            ease:'expo.out'
+          }, delay);
+        });
       }
 
       function closeMenu(){
