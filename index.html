@@ -1281,7 +1281,7 @@
         /* Panel height: navbar → full */
         tl.fromTo(panel,
           { height:navH },
-          { height:fullH, duration:0.85, ease:'power4.out' },
+          { height:fullH, duration:1.0, ease:'expo.out' },
           0
         );
 
@@ -1305,7 +1305,7 @@
 
           tl.fromTo(child,
             { y:offsets[i] },
-            { y:0, duration:0.9, ease:'power4.out' },
+            { y:0, duration:1.1, ease:'expo.out' },
             delay
           );
         });
