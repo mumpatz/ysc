@@ -1282,36 +1282,28 @@
 
         tl = gsap.timeline();
 
-        /* Panel height: navbar → full */
+        /* Panel height reveals content top→bottom (overflow:hidden clips).
+           This is the leading motion — bottom edge descends. */
         tl.fromTo(panel,
           { height:navH },
           { height:fullH, duration:1.0, ease:'expo.out' },
           0
         );
 
-        /* Each child starts BEHIND the navbar (hidden by z-index).
-           Extra -40px so items aren't visible during stagger wait. */
-        var offsets = [];
-        children.forEach(function(child){
-          var top = child.offsetTop;
-          offsets.push(-(top - navH) - 40);
-        });
-
-        /* Stagger delays: reverse order (bottom first).
-           Logarithmic spacing via power curve. */
-        var n = children.length;
-        var totalStagger = 0.45;
-        children.forEach(function(child, i){
-          var ri = n - 1 - i; /* reverse index: 0=last child, n-1=first child */
-          var t = ri / (n - 1); /* 0 to 1 */
-          var delay = totalStagger * Math.pow(t, 1.8); /* power curve */
-
-          tl.fromTo(child,
-            { y:offsets[i] },
-            { y:0, duration:1.1, ease:'expo.out' },
-            delay
-          );
-        });
+        /* Items get a subtle Y push from above as they're revealed.
+           Panel overflow:hidden keeps them hidden until the edge passes.
+           from:"end" = FAQs area first, Retreats last.
+           Stagger ease creates logarithmic delay distribution. */
+        tl.from(children, {
+          y:-40,
+          duration:0.9,
+          ease:'expo.out',
+          stagger:{
+            each:0.06,
+            from:'end',
+            ease:'power2.in'
+          }
+        }, 0.02);
       }
 
       function closeMenu(){
@@ -1330,16 +1322,14 @@
           }
         });
 
-        /* Items slide up and panel collapses */
-        children.forEach(function(child, i){
-          var top = child.offsetTop;
-          tl.to(child, {
-            y:-(top - navH),
-            duration:0.3,
-            ease:'power2.in'
-          }, i * 0.02);
-        });
-        tl.to(panel, { height:navH, duration:0.35, ease:'power2.in' }, 0.05);
+        /* Items slide up, panel collapses */
+        tl.to(children, {
+          y:-30,
+          duration:0.25,
+          ease:'power2.in',
+          stagger:{ each:0.02, from:'end' }
+        }, 0);
+        tl.to(panel, { height:navH, duration:0.3, ease:'power2.in' }, 0.05);
       }
 
       burger.addEventListener('click', function(){
