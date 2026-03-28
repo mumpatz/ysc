@@ -1252,11 +1252,17 @@
         if(isOpen) return;
         isOpen = true;
 
-        /* Set padding-top = navbar height + 52px
-           (64px gap minus 12px navbar-inner bottom padding,
-            so distance from logo bottom to Retreats = 64px) */
+        /* Dynamic spacing: items fill 80vh from logo bottom to panel bottom.
+           7 flex children (4 texts 16px + 3 dividers 1px) = 67px fixed.
+           8 equal gaps (top padding + 6 flex gaps + bottom padding).
+           G = (80vh - 67) / 8 */
         var navH = navInner.offsetHeight;
-        panelInner.style.paddingTop = (navH + 52) + 'px';
+        var viewH = window.innerHeight;
+        var targetH = viewH * 0.8;
+        var G = Math.max(24, (targetH - 67) / 8);
+        panelInner.style.paddingTop = (navH - 12 + G) + 'px';
+        panelInner.style.paddingBottom = G + 'px';
+        panelInner.style.gap = G + 'px';
 
         burger.classList.add('is-open');
         nav.classList.add('menu-open');
