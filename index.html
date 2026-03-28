@@ -1288,13 +1288,12 @@
           0
         );
 
-        /* Each child starts at navbar bottom and slides to its position.
-           Y offset = -(distance from navbar bottom to element position).
-           Stagger: last children (FAQs area) start first. */
+        /* Each child starts BEHIND the navbar (hidden by z-index).
+           Extra -40px so items aren't visible during stagger wait. */
         var offsets = [];
         children.forEach(function(child){
           var top = child.offsetTop;
-          offsets.push(-(top - navH));
+          offsets.push(-(top - navH) - 40);
         });
 
         /* Stagger delays: reverse order (bottom first).
