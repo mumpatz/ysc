@@ -1222,11 +1222,14 @@
       }, {passive:true});
     })();
 
-    /* Lock menu link widths to hover-state size so letter-spacing animation is layout-neutral */
-    document.querySelectorAll('.navbar__menu a').forEach(function(a){
+    /* Lock menu LI widths to hover-state size so letter-spacing animation is layout-neutral */
+    document.querySelectorAll('.navbar__menu li').forEach(function(li){
+      var a = li.querySelector('a');
+      if(!a) return;
       a.style.letterSpacing = '1.5px';
-      a.style.minWidth = a.scrollWidth + 'px';
+      var w = li.scrollWidth;
       a.style.letterSpacing = '';
+      li.style.width = w + 'px';
     });
 
     /* Mobile menu — "Falling leaves" animation
