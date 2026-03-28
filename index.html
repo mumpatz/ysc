@@ -1252,9 +1252,11 @@
         if(isOpen) return;
         isOpen = true;
 
-        /* Set padding-top = navbar height + 64px gap */
+        /* Set padding-top = navbar height + 52px
+           (64px gap minus 12px navbar-inner bottom padding,
+            so distance from logo bottom to Retreats = 64px) */
         var navH = navInner.offsetHeight;
-        panelInner.style.paddingTop = (navH + 64) + 'px';
+        panelInner.style.paddingTop = (navH + 52) + 'px';
 
         burger.classList.add('is-open');
         nav.classList.add('menu-open');
